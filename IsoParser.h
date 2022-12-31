@@ -1,7 +1,17 @@
 #ifndef ISO_PARSER_H
 #define ISO_PARSER_H
 
-#include "Iso.h"
+enum
+{
+	ISO1987_07 = 0,
+	ISO1987_08,
+	ISO1993_07,
+	ISO1993_08,
+	ISO2003_07,
+	ISO2003_08,
+	ISO2003_SH,
+	ISO2003_SP
+};
 
 class IsoParser // Engine
 {
@@ -11,6 +21,7 @@ public:
 
 	void SetTxnString(std::string& txnString) { mTxnString = txnString; }
 	std::string GetTxnString() { return mTxnString; }
+	int GetIsoStandard() { return mIsoInStandard; }
 
 	void AddIso(class Iso* iso);
 	void RemoveIso(class Iso* iso);

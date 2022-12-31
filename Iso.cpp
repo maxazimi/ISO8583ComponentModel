@@ -5,10 +5,6 @@
 Iso::Iso(IsoParser* isoParser)
 	:mOwner(isoParser)
 {
-	for (int i = 0; i < sizeof(mBitmap); i++)
-	{
-		mBitmap[i] = false;
-	}
 	mOwner->AddIso(this);
 }
 
@@ -18,28 +14,16 @@ Iso::~Iso()
 
 	// Need to delete components
 	// Because ~Component calls RemoveComponent, need a different style loop
-	while (!mComponents.empty())
+	for (auto itr = mComponents.begin(); itr != mComponents.end(); ++itr)
 	{
-		delete mComponents.back();
+        delete itr->second;
 	}
+	mComponents.clear();
 }
 
-void Iso::AddComponent(Component* component)
+void Iso::AddComponent(int bitNumber, Component* component)
 {
-	// Find the insertion point in the sorted vector
-	// (The first element with a order higher than me)
-	int myOrder = component->GetProcessOrder();
-	auto iter = mComponents.begin();
-	for (; iter != mComponents.end(); ++iter)
-	{
-		if (myOrder < (*iter)->GetProcessOrder())
-		{
-			break;
-		}
-	}
-
-	// Inserts element before position of iterator
-	mComponents.insert(iter, component);
+	mComponents.insert({bitNumber, component});
 }
 
 void Iso::RemoveComponent(Component* component)

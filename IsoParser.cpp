@@ -1,7 +1,7 @@
-#include "IsoParser.h"
 #include "Iso1987.h"
 #include "Iso1993.h"
 #include "Iso2003.h"
+#include "IsoParser.h"
 
 IsoParser::IsoParser(std::string txnString, int isoInStandard)
 {
@@ -11,13 +11,30 @@ IsoParser::IsoParser(std::string txnString, int isoInStandard)
 	switch (isoInStandard)
 	{
 		default:
-		case 0:
-			AddIso(new Iso1987(this));
+		case ISO1987_07:
+			AddIso(new Iso1987_07(this));
 			break;
-		case 1:
+		case ISO1987_08:
+			AddIso(new Iso1987_08(this));
+			break;
+
+		case ISO1993_07:
 			AddIso(new Iso1993(this));
 			break;
-		case 2:
+		case ISO1993_08:
+			AddIso(new Iso1993(this));
+			break;
+
+		case ISO2003_07:
+			AddIso(new Iso2003(this));
+			break;
+		case ISO2003_08:
+			AddIso(new Iso2003(this));
+			break;
+		case ISO2003_SH:
+			AddIso(new Iso2003(this));
+			break;
+		case ISO2003_SP:
 			AddIso(new Iso2003(this));
 			break;
 	}

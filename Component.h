@@ -1,22 +1,13 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <cstdint>
+#include <string>
 
 class Component
 {
 public:
-	Component(class Iso* owner)
-		:mOwner(owner)
-	{
-		// Add to iso's vector of components
-		mOwner->AddComponent(this);
-	}
-
-	virtual ~Component()
-	{
-		mOwner->RemoveComponent(this);
-	}
+	Component(class Iso* owner, int bitNumber = 0);
+	virtual ~Component();
 
     virtual void UpdateInfo();
 	virtual void CheckInfo();
@@ -30,6 +21,7 @@ public:
 protected:
 	// Owning iso
 	class Iso* mOwner;
+	int mBitNumber;
     int mProcessOrder;
 	std::string mBitString;
 };

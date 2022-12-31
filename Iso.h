@@ -4,7 +4,8 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include "BitComponents.h"
+#include <map>
+//#include "IsoParser.h"
 
 class Iso
 {
@@ -15,17 +16,14 @@ public:
     class IsoParser* GetIsoParser() { return mOwner; }
 
     // Add/remove components
-	void AddComponent(class Component* component);
+	void AddComponent(int bitNumber, class Component* component);
 	void RemoveComponent(class Component* component);
 
     virtual void ConvertToIso2003();
     virtual void ConvertFromIso2003();
 
-protected:
-    bool mBitmap[128];
-
 private:
-	std::vector<class Component*> mComponents;
+	std::map<int, class Component*> mComponents;
 	class IsoParser* mOwner;
 };
 

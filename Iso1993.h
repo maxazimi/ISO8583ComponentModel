@@ -3,10 +3,18 @@
 
 #include "Iso.h"
 
-class Iso1993 : public Iso
+class Iso1993_07 : public Iso
 {
 public:
-	Iso1993(class IsoParser* isoParser);
+	Iso1993_07(class IsoParser* isoParser);
+
+private:
+};
+
+class Iso1993_08 : public Iso
+{
+public:
+	Iso1993_08(class IsoParser* isoParser);
 
 private:
 };
