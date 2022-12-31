@@ -3,14 +3,18 @@
 #include "Component.h"
 
 Iso::Iso(IsoParser* isoParser)
-	:mIsoParser(isoParser)
+	:mOwner(isoParser)
 {
-	mIsoParser->AddIso(this);
+	for (int i = 0; i < sizeof(mBitmap); i++)
+	{
+		mBitmap[i] = false;
+	}
+	mOwner->AddIso(this);
 }
 
 Iso::~Iso()
 {
-	mIsoParser->RemoveIso(this);
+	mOwner->RemoveIso(this);
 
 	// Need to delete components
 	// Because ~Component calls RemoveComponent, need a different style loop
@@ -45,4 +49,14 @@ void Iso::RemoveComponent(Component* component)
 	{
 		mComponents.erase(iter);
 	}
+}
+
+void Iso::ConvertToIso2003()
+{
+
+}
+
+void Iso::ConvertFromIso2003()
+{
+
 }
