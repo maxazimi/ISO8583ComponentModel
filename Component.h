@@ -16,7 +16,7 @@ class Component
     std::string GetBitString() { return mBitSubstr; }
 
     virtual void GetBit();
-    virtual void CheckInfo() = 0;
+    virtual void CheckInfo() {}
 
   protected:
     // Owning iso

@@ -1,10 +1,17 @@
 #include "Iso.h"
 #include "IsoParser.h"
-#include "Component.h"
+#include "BitComponents.h"
 
 Iso::Iso(IsoParser* isoParser) : mOwner(isoParser), mParseIndex(0)
 {
     mOwner->AddIso(isoParser->GetIsoStandard(), this);
+
+	Component* com;
+	com = new Bit001Component(this);
+	com = new Bit002Component(this);
+	com = new Bit003Component(this);
+	com = new Bit004Component(this);
+	com = new Bit005Component(this);
 }
 
 Iso::~Iso()
@@ -12,20 +19,21 @@ Iso::~Iso()
     mOwner->RemoveIso(this);
 
     for (auto itr = mComponents.begin(); itr != mComponents.end(); ++itr)
-    {
         delete itr->second;
-    }
     mComponents.clear();
 }
 
-void Iso::AddComponent(int bitNumber, Component* component) { mComponents.insert({bitNumber, component}); }
+void Iso::AddComponent(int bitNumber, Component* component)
+{
+	mComponents.insert({bitNumber, component});
+}
 
 void Iso::RemoveComponent(Component* component)
 {
-    auto iter = std::find(mComponents.begin(), mComponents.end(), component);
-    if (iter != mComponents.end())
+    for (auto& item : mComponents)
     {
-        mComponents.erase(iter);
+    	if (item.second == component)
+		    mComponents.erase(item.first);
     }
 }
 

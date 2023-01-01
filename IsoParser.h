@@ -9,10 +9,10 @@ class IsoParser // Engine
 {
 public:
     IsoParser(std::string txnString = "");
-    ~IsoParser();
+    ~IsoParser() = default;
 
     void SetTxnString(std::string& txnString) { mTxnString = txnString; }
-    std::string GetTxnString() { return mTxnString; }
+    std::string& GetTxnString() { return mTxnString; }
 
     int GetIsoStandard() { return mIsoInStandard; }
 
@@ -24,10 +24,11 @@ public:
 
 private:
     std::map<int, class Iso*> mIsos;
-	  int mIsoInStandard;
+    int mIsoInStandard;
 
     std::string mTxnString;
-	  size_t mTxnSize;
+    size_t mTxnSize;
+    int mMti;
 };
 
 #endif // ISO_PARSER_H

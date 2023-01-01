@@ -1,11 +1,9 @@
 #ifndef BIT_COMPONENTS_H
 #define BIT_COMPONENTS_H
 
-#include <iostream>
-#include <vector>
-
-#include "Component.h"
+#include "IsoParser.h"
 #include "Iso.h"
+#include "Component.h"
 #include "Helper.h"
 
 class Bit001Component : public Component // not being used

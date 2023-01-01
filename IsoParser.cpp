@@ -9,23 +9,28 @@ IsoParser::IsoParser(std::string txnString)
     mIsoInStandard = 0;
 }
 
-void IsoParser::AddIso(int standard, Iso* iso) { mIsos.insert({standard, iso}); }
+void IsoParser::AddIso(int standard, Iso* iso)
+{
+	mIsos.insert({standard, iso});
+}
 
 void IsoParser::RemoveIso(Iso* iso)
 {
-    auto iter = std::find(mIsos.begin(), mIsos.end(), iso);
-    if (iter != mIsos.end())
-    {
-        delete iter->second;
-        mIsos.erase(iter);
-    }
+	for (auto& item : mIsos)
+	{
+		if (item.second == iso)
+		{
+			delete item.second;
+			mIsos.erase(item.first);
+		}
+	}
 }
 
 void IsoParser::Parse()
 {
     mTxnSize = std::stoul(mTxnString.substr(0, 4));
     mIsoInStandard = std::stod(mTxnString.substr(4, 1));
-    int mti = std::stod(mTxnString.substr(5, 3));
+    mMti = std::stod(mTxnString.substr(5, 3));
 
     std::string bitmapStr = mTxnString.substr(8, 32);
     std::vector<uint8_t> bitmap = Helper::HexToBytes(bitmapStr);
@@ -51,23 +56,23 @@ void IsoParser::IsoInstantiate()
         break;
 
     case ISO1993_07:
-        // AddIso(mIsoInStandard, new Iso1993_07(this));
+        //AddIso(mIsoInStandard, new Iso1993_07(this));
         break;
     case ISO1993_08:
-        // AddIso(mIsoInStandard, new Iso1993_08(this));
+        //AddIso(mIsoInStandard, new Iso1993_08(this));
         break;
 
     case ISO2003_07:
-        AddIso(mIsoInStandard, new Iso2003(this));
+        //AddIso(mIsoInStandard, new Iso2003(this));
         break;
     case ISO2003_08:
-        AddIso(mIsoInStandard, new Iso2003(this));
+        //AddIso(mIsoInStandard, new Iso2003(this));
         break;
     case ISO2003_SH:
-        AddIso(mIsoInStandard, new Iso2003(this));
+        //AddIso(mIsoInStandard, new Iso2003(this));
         break;
     case ISO2003_SP:
-        AddIso(mIsoInStandard, new Iso2003(this));
+        //AddIso(mIsoInStandard, new Iso2003(this));
         break;
     }
 }

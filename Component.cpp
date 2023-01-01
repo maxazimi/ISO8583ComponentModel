@@ -1,5 +1,6 @@
-#include "Component.h"
+#include "IsoParser.h"
 #include "Iso.h"
+#include "Component.h"
 
 Component::Component(Iso* owner, int bitNumber) : mOwner(owner)
 {
