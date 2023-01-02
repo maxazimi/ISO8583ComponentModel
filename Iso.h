@@ -1,7 +1,7 @@
 #ifndef ISO_H
 #define ISO_H
 
-#include <string>
+#include <iostream>
 #include <algorithm>
 #include <vector>
 #include <map>
@@ -45,7 +45,7 @@ public:
                     mBitmap.emplace_back(false);
             }
         }
-        mBitmap[0] = false; // !!
+        mBitmap[0] = false; // exclude bit001
     }
 
     void SetIsoStandard(int isoStandard) { mIsoStandard = isoStandard; }
@@ -64,8 +64,7 @@ public:
 
     void PrintData()
     {
-        //printf("%llu %d%d%d %llu %d\n", mPan, mPrCode[0], mPrCode[1], mPrCode[2], mTransactionAmount, mCurrencyCode);
-        //printf("%llu\n", mPan);
+        printf("%llu %u %u %u\n", mPan, mPrCode[0], mPrCode[1], mPrCode[2]);
     }
 
 public: // ISO message Getter/Setter methods

@@ -11,8 +11,9 @@ Component::~Component() { mOwner->RemoveComponent(this); }
 
 void Component::GetBit()
 {
-    size_t substrLen = mBitSpec.size;
     mBitSpec = mOwner->GetBitSpecVec().at(mBitNumber);
+
+	size_t substrLen = mBitSpec.size;
     std::string tmpString = mOwner->GetIsoParser()->GetTxnString();
 
     if (mBitSpec.format != FIXED) // variable length
@@ -24,5 +25,5 @@ void Component::GetBit()
     mBitSubstr = tmpString.substr(mOwner->GetParseIndex(), substrLen);
     mOwner->GetParseIndex() += substrLen;
 
-    printf("mBitSubstr: %s\nindex: %d\n", mBitSubstr.c_str(), mOwner->GetParseIndex());
+    //printf("mBitSubstr: %s\nindex: %d\n", mBitSubstr.c_str(), mOwner->GetParseIndex());
 }

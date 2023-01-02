@@ -5,16 +5,12 @@
 Iso::Iso(IsoParser* isoParser) : mOwner(isoParser),
     mParseIndex(40)
 {
-    // mBitmap.resize(128);
-    // for (int i = 0; i < 128; i++)
-    //     mBitSpecVec[i] = {i, FIXED, "N", 0, 0};
-
     mOwner->AddIso(this);
 
-	Component* com = new Bit001Component(this);
+	Component* com = nullptr;
 	com = new Bit002Component(this);
-	//com = new Bit003Component(this);
-	//com = new Bit004Component(this);
+	com = new Bit003Component(this);
+	com = new Bit004Component(this);
 	//com = new Bit005Component(this);
 }
 
@@ -45,12 +41,9 @@ void Iso::RemoveComponent(Component* component)
 
 void Iso::Process()
 {
-    for (int i = 1; i <= mComponents.size(); i++)
+    for (auto& com : mComponents)
     {
-        if (mBitmap[i])
-        {
-            mComponents.at(i)->GetBit();
-        }
+        if (mBitmap[com.first]) com.second->GetBit();
     }
 }
 

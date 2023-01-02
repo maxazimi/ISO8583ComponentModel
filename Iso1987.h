@@ -10,8 +10,8 @@ class Iso1987 : public Iso
     Iso1987(class IsoParser* isoParser) : Iso(isoParser)
     {
         mBitSpecVec = {
-            {1, FIXED, "B", 0, 0},
-            //{1, FIXED, "B", 8, 8},
+            {0, FIXED, "B", 0, 0},
+            {1, FIXED, "B", 8, 8},
             {2, LLVAR, "N", 0, 19},
             {3, FIXED, "N", 6, 6},
             {4, FIXED, "N", 12, 12},

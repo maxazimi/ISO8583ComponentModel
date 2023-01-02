@@ -29,13 +29,13 @@ void IsoParser::RemoveIso(Iso* iso)
 void IsoParser::Parse()
 {
     mTxnSize = std::stoul(mTxnString.substr(0, 4));
-    mIsoInStandard = std::stod(mTxnString.substr(4, 1));
-    mMti = std::stod(mTxnString.substr(5, 3));
+    mIsoInStandard = std::stoi(mTxnString.substr(4, 1));
+    mMti = std::stoi(mTxnString.substr(5, 3));
 
     std::string bitmapStr = mTxnString.substr(8, 32);
     std::vector<uint8_t> bitmap = Helper::HexToBytes(bitmapStr);
 
-    printf("%X %X %X %X\n", bitmap[0], bitmap[1], bitmap[2], bitmap[3]);
+    //printf("%X %X %X %X\n", bitmap[0], bitmap[1], bitmap[2], bitmap[3]);
 
     if (mIsos.find(mIsoInStandard) == mIsos.end()) // if not found
         IsoInstantiate();
