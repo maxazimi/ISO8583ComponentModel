@@ -14,12 +14,10 @@ public:
     void SetTxnString(std::string& txnString) { mTxnString = txnString; }
     std::string& GetTxnString() { return mTxnString; }
 
-    int GetIsoStandard() { return mIsoInStandard; }
-
-    void AddIso(int standard, class Iso* iso);
+    void AddIso(class Iso* iso);
     void RemoveIso(class Iso* iso);
 
-	  void IsoInstantiate();
+	void IsoInstantiate();
     void Parse();
 
 private:

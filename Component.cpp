@@ -2,30 +2,27 @@
 #include "Iso.h"
 #include "Component.h"
 
-Component::Component(Iso* owner, int bitNumber) : mOwner(owner)
+Component::Component(Iso* owner, int bitNumber) : mOwner(owner), mBitNumber(bitNumber)
 {
-    mBitStrLen = 1;  // as a minimum default value
-    mBitStrlVar = 0; // fixed-length by default
-    mBitStrMaxLen = mBitStrLen;
-
-    mBitNumber = bitNumber;
-    mOwner->AddComponent(bitNumber, this);
+    mOwner->AddComponent(this);
 }
 
 Component::~Component() { mOwner->RemoveComponent(this); }
 
 void Component::GetBit()
 {
-    // sub-string size must have been specified by the child component
+    size_t substrLen = mBitSpec.size;
+    mBitSpec = mOwner->GetBitSpecVec().at(mBitNumber);
     std::string tmpString = mOwner->GetIsoParser()->GetTxnString();
-    size_t substrLen = mBitStrLen;
 
-    if (mBitStrlVar > 0) // variable length
+    if (mBitSpec.format != FIXED) // variable length
     {
-        substrLen = std::stoul(tmpString.substr(mOwner->GetParseIndex(), mBitStrlVar));
-        mOwner->GetParseIndex() += mBitStrlVar;
+        substrLen = std::stoul(tmpString.substr(mOwner->GetParseIndex(), mBitSpec.format));
+        mOwner->GetParseIndex() += mBitSpec.format;
     }
 
     mBitSubstr = tmpString.substr(mOwner->GetParseIndex(), substrLen);
     mOwner->GetParseIndex() += substrLen;
+
+    printf("mBitSubstr: %s\nindex: %d\n", mBitSubstr.c_str(), mOwner->GetParseIndex());
 }

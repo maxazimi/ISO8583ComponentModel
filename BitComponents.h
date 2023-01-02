@@ -9,12 +9,13 @@
 class Bit001Component : public Component // not being used
 {
   public:
-    Bit001Component(class Iso* owner, std::string txnSubStr = "", int processOrder = 1) : Component(owner)
+    Bit001Component(class Iso* owner, int processOrder = 1) : Component(owner, 1)
     {
-        mBitSubstr = txnSubStr;
         mProcessOrder = processOrder;
+        mData = 0;
     }
-    ~Bit001Component() = default;
+
+    void GetBit() override { Component::GetBit(); }
 
   private:
     uint64_t mData;
@@ -23,28 +24,23 @@ class Bit001Component : public Component // not being used
 class Bit002Component : public Component // PAN
 {
   public:
-    Bit002Component(class Iso* owner, std::string txnSubStr = "", int processOrder = 2) : Component(owner)
+    Bit002Component(class Iso* owner, int processOrder = 2) : Component(owner, 2)
     {
-        mBitSubstr = txnSubStr;
         mProcessOrder = processOrder;
-
-        mBitStrLen = 0;
-        mBitStrlVar = 2;
-		mBitStrMaxLen = 19;
     }
-    ~Bit002Component() = default;
 
-	void GetBit() override
-	{
-		Component::GetBit();
-		mPan = std::stoull(mBitSubstr);
-	}
-
-    void SetPan(std::string& bitStr)
+    void GetBit() override
     {
-        mPanSize = std::stoi(bitStr.substr(0, 3));
-        mPan = std::stoul(bitStr.substr(3, mPanSize));
+        Component::GetBit();
+
+        printf("mBitSubstr: %s\n", mBitSubstr.c_str());
+        mPanSize = std::stoi(mBitSubstr.substr(0, 3));
+        mPan = std::stoul(mBitSubstr.substr(3, mPanSize));
+
+        mOwner->SetPan(mPan);
+        printf("Pan: %llu\n", mPan);
     }
+
     uint64_t GetPan() { return mPan; }
 
   private:
@@ -52,62 +48,87 @@ class Bit002Component : public Component // PAN
     uint32_t mPanSize;
 };
 
-class Bit003Component : public Component
+class Bit003Component : public Component // PrCode
 {
   public:
-    Bit003Component(class Iso* owner, std::string txnSubStr = "", int processOrder = 3) : Component(owner)
+    Bit003Component(class Iso* owner, int processOrder = 3) : Component(owner, 3)
     {
-        mBitSubstr = txnSubStr;
         mProcessOrder = processOrder;
     }
-    ~Bit003Component() = default;
 
-    void SetPrCode(std::string& bitStr)
+    void GetBit() override
     {
-        mPrCode[0] = std::stoi(bitStr.substr(0, 2));
-        mPrCode[1] = std::stoi(bitStr.substr(2, 2));
-        mPrCode[2] = std::stoi(bitStr.substr(4, 2));
+        Component::GetBit();
+
+        mPrCode[0] = std::stoi(mBitSubstr.substr(0, 2));
+        mPrCode[1] = std::stoi(mBitSubstr.substr(2, 2));
+        mPrCode[2] = std::stoi(mBitSubstr.substr(4, 2));
+
+        mOwner->SetPrCode(mPrCode);
     }
-    std::vector<int> GetPrCode() { return mPrCode; }
+
+    std::vector<uint8_t> GetPrCode() { return mPrCode; }
 
   private:
-    std::vector<int> mPrCode;
+    std::vector<uint8_t> mPrCode;
 };
 
-class Bit004Component : public Component
+class Bit004Component : public Component // transaction amount
 {
   public:
-    Bit004Component(class Iso* owner, std::string txnSubStr = "", int processOrder = 4) : Component(owner)
+    Bit004Component(class Iso* owner, int processOrder = 4) : Component(owner, 4)
     {
-        mBitSubstr = txnSubStr;
         mProcessOrder = processOrder;
+        mFloatDigits = 0;
+        mCurrencyCode = 0;
     }
-    ~Bit004Component() = default;
 
-    void SetTnxAmt(std::string& bitStr)
+    void GetBit() override
     {
-        if (mOwner->GetIsoParser()->GetIsoStandard() >= ISO2003_07)
+        Component::GetBit();
+
+        if (mOwner->GetIsoStandard() >= ISO2003_07)
         {
+            mCurrencyCode = std::stoul(mBitSubstr.substr(0, 3));
+            mFloatDigits = std::stoul(mBitSubstr.substr(3, 1));
+            mTxnAmt = std::stoull(mBitSubstr.substr(4, 12));
         }
-        mTnxAmt = std::stoul(bitStr);
+        else
+        {
+            mTxnAmt = std::stoull(mBitSubstr);
+        }
+
+        mOwner->SetTxnAmount(mTxnAmt, mFloatDigits, mCurrencyCode);
     }
-    uint64_t GetTnxAmt() { return mTnxAmt; }
+
+    template <typename T>
+    T GetTnxAmt() { return mTxnAmt; }
+
+    template <typename T>
+    T GetCurrencyCode()
+    {
+        if (mOwner->GetIsoStandard() < ISO2003_07)
+            throw std::invalid_argument("Item not supported for this ISO version");
+        return mCurrencyCode;
+    }
 
   private:
-    uint64_t mTnxAmt;
+    uint64_t mTxnAmt;
+
+    // ISO2003
+    int mCurrencyCode;
+    int mFloatDigits;
 };
 
 class Bit005Component : public Component
 {
   public:
-    Bit005Component(class Iso* owner, std::string txnSubStr = "", int processOrder = 5) : Component(owner)
+    Bit005Component(class Iso* owner, int processOrder = 5) : Component(owner, 5)
     {
-        mBitSubstr = txnSubStr;
         mProcessOrder = processOrder;
     }
-    ~Bit005Component() = default;
 
-    void Set(std::string& bitStr) { mData = std::stoul(bitStr); }
+    void GetBit() override { Component::GetBit(); }
     uint64_t Get() { return mData; }
 
   private:

@@ -14,6 +14,7 @@ class Component
 
     void SetBitString(std::string& bitString) { mBitSubstr = bitString; }
     std::string GetBitString() { return mBitSubstr; }
+    int GetBitNumber() { return mBitNumber; }
 
     virtual void GetBit();
     virtual void CheckInfo() {}
@@ -22,13 +23,11 @@ class Component
     // Owning iso
     class Iso* mOwner;
 
-    int mBitNumber;
+    int mBitNumber = 0;
     int mProcessOrder;
 
     std::string mBitSubstr;
-    size_t mBitStrLen;
-    size_t mBitStrlVar;
-    size_t mBitStrMaxLen;
+    BitSpec mBitSpec;
 };
 
 #endif // COMPONENT_H

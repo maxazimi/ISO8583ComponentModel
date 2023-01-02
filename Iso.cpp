@@ -2,16 +2,20 @@
 #include "IsoParser.h"
 #include "BitComponents.h"
 
-Iso::Iso(IsoParser* isoParser) : mOwner(isoParser), mParseIndex(0)
+Iso::Iso(IsoParser* isoParser) : mOwner(isoParser),
+    mParseIndex(40)
 {
-    mOwner->AddIso(isoParser->GetIsoStandard(), this);
+    // mBitmap.resize(128);
+    // for (int i = 0; i < 128; i++)
+    //     mBitSpecVec[i] = {i, FIXED, "N", 0, 0};
 
-	Component* com;
-	com = new Bit001Component(this);
+    mOwner->AddIso(this);
+
+	Component* com = new Bit001Component(this);
 	com = new Bit002Component(this);
-	com = new Bit003Component(this);
-	com = new Bit004Component(this);
-	com = new Bit005Component(this);
+	//com = new Bit003Component(this);
+	//com = new Bit004Component(this);
+	//com = new Bit005Component(this);
 }
 
 Iso::~Iso()
@@ -23,9 +27,11 @@ Iso::~Iso()
     mComponents.clear();
 }
 
-void Iso::AddComponent(int bitNumber, Component* component)
+void Iso::AddComponent(Component* component)
 {
-	mComponents.insert({bitNumber, component});
+    if (component == nullptr)
+        throw std::invalid_argument("Null component!");
+	mComponents.insert({component->GetBitNumber(), component});
 }
 
 void Iso::RemoveComponent(Component* component)
@@ -39,10 +45,12 @@ void Iso::RemoveComponent(Component* component)
 
 void Iso::Process()
 {
-    for (int i = 0; i < mBitmap.size(); i++)
+    for (int i = 1; i <= mComponents.size(); i++)
     {
         if (mBitmap[i])
+        {
             mComponents.at(i)->GetBit();
+        }
     }
 }
 
