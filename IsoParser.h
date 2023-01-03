@@ -14,6 +14,8 @@ public:
     void SetTxnString(std::string& txnString) { mTxnString = txnString; }
     std::string& GetTxnString() { return mTxnString; }
 
+    int GetIndex() { return mIndex; }
+
     void AddIso(class Iso* iso);
     void RemoveIso(class Iso* iso);
 
@@ -23,6 +25,7 @@ public:
 private:
     std::map<int, class Iso*> mIsos;
     int mIsoInStandard;
+    int mIndex;
 
     std::string mTxnString;
     size_t mTxnSize;

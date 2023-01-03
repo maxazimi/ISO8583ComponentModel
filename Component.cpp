@@ -24,6 +24,4 @@ void Component::GetBit()
 
     mBitSubstr = tmpString.substr(mOwner->GetParseIndex(), substrLen);
     mOwner->GetParseIndex() += substrLen;
-
-    //printf("mBitSubstr: %s\nindex: %d\n", mBitSubstr.c_str(), mOwner->GetParseIndex());
 }

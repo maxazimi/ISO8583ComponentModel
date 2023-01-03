@@ -5,6 +5,7 @@
 
 IsoParser::IsoParser(std::string txnString)
 {
+    mIndex = 0;
     mTxnString = txnString;
     mIsoInStandard = 0;
 }
@@ -28,6 +29,8 @@ void IsoParser::RemoveIso(Iso* iso)
 
 void IsoParser::Parse()
 {
+    mIndex = 0;
+    
     mTxnSize = std::stoul(mTxnString.substr(0, 4));
     mIsoInStandard = std::stoi(mTxnString.substr(4, 1));
     mMti = std::stoi(mTxnString.substr(5, 3));
@@ -35,9 +38,9 @@ void IsoParser::Parse()
     std::string bitmapStr = mTxnString.substr(8, 32);
     std::vector<uint8_t> bitmap = Helper::HexToBytes(bitmapStr);
 
-    //printf("%X %X %X %X\n", bitmap[0], bitmap[1], bitmap[2], bitmap[3]);
+    mIndex += 40;
 
-    if (mIsos.find(mIsoInStandard) == mIsos.end()) // if not found
+    if (mIsos.find(mIsoInStandard) == mIsos.end()) // if ISO version object not found
         IsoInstantiate();
 
 	// from now on each bit-component will parse its own part of message
@@ -56,7 +59,7 @@ void IsoParser::IsoInstantiate()
         iso = new Iso1987_07(this);
         break;
     case ISO1987_08:
-        //iso = new Iso1987_08(this);
+        iso = new Iso1987_08(this);
         break;
 
     case ISO1993_07:

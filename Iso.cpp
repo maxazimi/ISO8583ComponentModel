@@ -2,8 +2,7 @@
 #include "IsoParser.h"
 #include "BitComponents.h"
 
-Iso::Iso(IsoParser* isoParser) : mOwner(isoParser),
-    mParseIndex(40)
+Iso::Iso(IsoParser* isoParser) : mOwner(isoParser)
 {
     mOwner->AddIso(this);
 
@@ -11,7 +10,7 @@ Iso::Iso(IsoParser* isoParser) : mOwner(isoParser),
 	com = new Bit002Component(this);
 	com = new Bit003Component(this);
 	com = new Bit004Component(this);
-	//com = new Bit005Component(this);
+	com = new Bit005Component(this);
 }
 
 Iso::~Iso()
@@ -25,8 +24,7 @@ Iso::~Iso()
 
 void Iso::AddComponent(Component* component)
 {
-    if (component == nullptr)
-        throw std::invalid_argument("Null component!");
+    if (component == nullptr) throw std::invalid_argument("Null component!");
 	mComponents.insert({component->GetBitNumber(), component});
 }
 
@@ -41,9 +39,11 @@ void Iso::RemoveComponent(Component* component)
 
 void Iso::Process()
 {
+    mParseIndex = mOwner->GetIndex();
     for (auto& com : mComponents)
     {
-        if (mBitmap[com.first]) com.second->GetBit();
+        if (mBitmap[com.first - 1])
+            com.second->GetBit();
     }
 }
 

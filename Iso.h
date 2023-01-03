@@ -64,7 +64,13 @@ public:
 
     void PrintData()
     {
-        printf("%llu %u %u %u\n", mPan, mPrCode[0], mPrCode[1], mPrCode[2]);
+        printf( "\n"
+                "Pan: %llu\n"
+                "PrCode: %u %u %u\n"
+                "TransactionAmount: %llu\n\n",
+                mPan,
+                mPrCode[0], mPrCode[1], mPrCode[2],
+                mTransactionAmount);
     }
 
 public: // ISO message Getter/Setter methods
@@ -92,7 +98,7 @@ private:
     std::vector<bool> mBitmap; // 128 items
 
     int mIsoStandard = 0;
-    int mParseIndex;
+    int mParseIndex = 0;
 
 private: // ISO message fields
     uint64_t mPan;
