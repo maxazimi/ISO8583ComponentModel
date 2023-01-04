@@ -11,10 +11,13 @@ Component::~Component() { mOwner->RemoveComponent(this); }
 
 void Component::GetBit()
 {
-    mBitSpec = mOwner->GetBitSpecVec().at(mBitNumber);
+	std::string tmpString = mOwner->GetIsoParser()->GetTxnString();
 
+    mBitSpec = mOwner->GetBitSpecVec().at(mBitNumber);
 	size_t substrLen = mBitSpec.size;
-    std::string tmpString = mOwner->GetIsoParser()->GetTxnString();
+
+	if (!Helper::CheckFormat(mBitSpec.type, tmpString))
+		throw std::logic_error("Field type error");
 
     if (mBitSpec.format != FIXED) // variable length
     {

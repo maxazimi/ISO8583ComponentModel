@@ -46,7 +46,3 @@ void Iso::Process()
             com.second->GetBit();
     }
 }
-
-void Iso::ConvertToIso2003() {}
-
-void Iso::ConvertFromIso2003() {}

@@ -49,7 +49,7 @@ public:
     }
 
     void SetIsoStandard(int isoStandard) { mIsoStandard = isoStandard; }
-    int GetIsoStandard() { return mIsoStandard; }
+    int GetIsoStandard() const { return mIsoStandard; }
 
     std::vector<bool>& GetBitmap() { return mBitmap; }
     std::vector<BitSpec>& GetBitSpecVec() { return mBitSpecVec; }
@@ -59,9 +59,6 @@ public:
 	void RemoveComponent(class Component* component);
 
     void Process(); // not overridable
-    virtual void ConvertToIso2003();
-    virtual void ConvertFromIso2003();
-
     void PrintData()
     {
         printf( "\n"

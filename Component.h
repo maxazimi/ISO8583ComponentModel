@@ -19,6 +19,9 @@ class Component
     virtual void GetBit();
     virtual void CheckInfo() {}
 
+	virtual void ConvertToIso2003() {}
+	virtual void ConvertFromIso2003() {}
+
   protected:
     // Owning iso
     class Iso* mOwner;
