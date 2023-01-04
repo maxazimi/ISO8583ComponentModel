@@ -15,6 +15,13 @@ typedef enum
     LLLLVAR
 } format_t;
 
+struct SubSpec
+{
+    int id;
+    std::string type;
+    int size;
+};
+
 struct BitSpec
 {
     int id;
@@ -22,6 +29,7 @@ struct BitSpec
     std::string type;
     int size;
     int max_size;
+    std::vector<SubSpec> subSpec;
 };
 
 class Iso
@@ -33,30 +41,29 @@ public:
     class IsoParser* GetIsoParser() { return mOwner; }
     int& GetParseIndex() { return mParseIndex; }
 
-    void SetBitmap(std::vector<uint8_t>& bitmap)
-    {
-        for (auto byte : bitmap)
-        {
-            for (int i = 0; i < 8; byte <<= 1, i++)
-            {
-                if (byte & 0x80)
-                    mBitmap.emplace_back(true);
-                else
-                    mBitmap.emplace_back(false);
-            }
-        }
-        mBitmap[0] = false; // exclude bit001
-    }
-
     void SetIsoStandard(int isoStandard) { mIsoStandard = isoStandard; }
     int GetIsoStandard() const { return mIsoStandard; }
 
+    void SetBitmap(std::vector<uint8_t>& bitmap);
     std::vector<bool>& GetBitmap() { return mBitmap; }
     std::vector<BitSpec>& GetBitSpecVec() { return mBitSpecVec; }
 
     // Add/remove components
 	void AddComponent(class Component* component);
 	void RemoveComponent(class Component* component);
+
+    virtual bool CheckFormat(const std::string& data, int bitNumber)
+    {
+        return true;
+
+        std::string format = mBitSpecVec.at(bitNumber).type;
+        for (auto& c : format)
+        {
+            size_t found = data.find(c);
+            if (found != std::string::npos)
+                ;
+        }
+    }
 
     void Process(); // not overridable
     void PrintData()
@@ -81,8 +88,22 @@ public: // ISO message Getter/Setter methods
     void SetTxnAmount(T& amount, int floatDigits, int currencyCode)
     {
         mTransactionAmount = amount;
-        mFloatDigits = floatDigits;
-        mCurrencyCode = currencyCode;
+        int dummy = floatDigits;
+        mTxnCurrencyCode = currencyCode;
+    }
+    template<typename T>
+    void SetSettlementAmount(T& amount, int floatDigits, int currencyCode)
+    {
+        mSettlementAmount = amount;
+        int dummy = floatDigits;
+        mSettleCurrencyCode = currencyCode;
+    }
+    template<typename T>
+    void SetBillingAmount(T& amount, int floatDigits, int currencyCode)
+    {
+        mBillingAmount = amount;
+        int dummy = floatDigits;
+        mBillCurrencyCode = currencyCode;
     }
 
 protected:
@@ -102,8 +123,11 @@ private: // ISO message fields
     std::vector<uint8_t> mPrCode;
 
     uint64_t mTransactionAmount;
-    int mFloatDigits;
-    int mCurrencyCode;
+    int mTxnCurrencyCode;
+    uint64_t mSettlementAmount;
+    int mSettleCurrencyCode;
+    uint64_t mBillingAmount;
+    int mBillCurrencyCode;
 };
 
 #endif // ISO_H

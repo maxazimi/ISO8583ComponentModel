@@ -10,25 +10,25 @@ class Iso2003 : public Iso
     Iso2003(class IsoParser* isoParser) : Iso(isoParser)
     {
         mBitSpecVec = {
-			{0, FIXED, "B", 0, 0},
-            {1, FIXED, "B", 8, 8},
-			{2, LLVAR, "N", 0, 19},
-			{3, FIXED, "AN", 6, 6},
-			{4, FIXED, "N", 16, 16},
-			{5, FIXED, "N", 16, 16},
-			{6, FIXED, "N", 16, 16},
+			{0, FIXED, "B", 0, 0}, // dummy
+            {1, FIXED, "B", 8, 8}, // bitmap
+			{2, LLVAR, "N", 0, 19}, // PAN
+			{3, FIXED, "AN", 6, 6, {{1, "AN", 2}, {2, "AN", 2}, {3, "AN", 2}}},
+			{4, FIXED, "N", 16, 16, {{1, "N", 3}, {2, "N", 1}, {3, "N", 12}}},
+			{5, FIXED, "N", 16, 16, {{1, "N", 3}, {2, "N", 1}, {3, "N", 12}}},
+			{6, FIXED, "N", 16, 16, {{1, "N", 3}, {2, "N", 1}, {3, "N", 12}}},
 			{7, FIXED, "N", 10, 10},
-			{8, FIXED, "N", 12, 12},
+			{8, FIXED, "N", 12, 12, {{1, "N", 3}, {2, "N", 1}, {3, "N", 8}}},
 			{9, FIXED, "N", 8, 8},
 			{10, FIXED, "N", 8, 8},
 			{11, FIXED, "N", 12, 12},
-			{12, FIXED, "N", 14, 14},
+			{12, FIXED, "N", 14, 14, {{1, "N", 8}, {2, "N", 6}}},
 			{13, FIXED, "N", 6, 6},
 			{14, FIXED, "N", 4, 4},
 			{15, FIXED, "N", 8, 8},
 			{16, FIXED, "N", 4, 4},
 			{17, FIXED, "N", 4, 4},
-			{18, LLLVAR, "ANSB", 0, 140},
+			{18, LLLVAR, "ANSB", 0, 140, {{1, "N", 2}, {2, "N", 4}, {3, "N", 3}, {4, "N", 2}, {5, "B", 1}, {6, "B", 2}}},
 			{19, FIXED, "N", 3, 3},
 			{20, FIXED, "N", 3, 3},
 			{21, FIXED, "ANS", 22, 22},

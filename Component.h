@@ -12,15 +12,16 @@ class Component
     class Iso* GetOwner() { return mOwner; }
     int GetProcessOrder() const { return mProcessOrder; }
 
-    void SetBitString(std::string& bitString) { mBitSubstr = bitString; }
-    std::string GetBitString() { return mBitSubstr; }
+    void SetBitString(std::string& bitString) { mBitString = bitString; }
+    std::string GetBitString() { return mBitString; }
+    
     int GetBitNumber() { return mBitNumber; }
 
     virtual void GetBit();
     virtual void CheckInfo() {}
 
-	virtual void ConvertToIso2003() {}
-	virtual void ConvertFromIso2003() {}
+    virtual void ConvertToIso2003() {}
+    virtual void ConvertFromIso2003() {}
 
   protected:
     // Owning iso
@@ -29,8 +30,9 @@ class Component
     int mBitNumber = 0;
     int mProcessOrder;
 
-    std::string mBitSubstr;
     BitSpec mBitSpec;
+    std::string mBitString;
+    std::vector<std::string> mSubBitStrVec;
 };
 
 #endif // COMPONENT_H

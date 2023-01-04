@@ -22,6 +22,21 @@ Iso::~Iso()
     mComponents.clear();
 }
 
+void Iso::SetBitmap(std::vector<uint8_t>& bitmap)
+{
+    for (auto byte : bitmap)
+    {
+        for (int i = 0; i < 8; byte <<= 1, i++) // ugly code!
+        {
+            if (byte & 0x80)
+                mBitmap.emplace_back(true);
+            else
+                mBitmap.emplace_back(false);
+        }
+    }
+    mBitmap[0] = false; // exclude bit001
+}
+
 void Iso::AddComponent(Component* component)
 {
     if (component == nullptr) throw std::invalid_argument("Null component!");

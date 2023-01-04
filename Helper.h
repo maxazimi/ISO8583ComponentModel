@@ -32,11 +32,6 @@ public:
         }
         return bytes;
     }
-
-    static bool CheckFormat(const std::string& format, const std::string& data)
-    {
-	    return true;
-    }
 };
 
 #endif // HELPER_H
