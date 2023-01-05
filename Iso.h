@@ -6,6 +6,18 @@
 #include <vector>
 #include <map>
 
+enum
+{
+    ISO1987_07 = 0,
+    ISO1987_08,
+    ISO1993_07,
+    ISO1993_08,
+    ISO2003_07,
+    ISO2003_08,
+    ISO2003_SH,
+    ISO2003_SP
+};
+
 typedef enum
 {
     FIXED = 0,

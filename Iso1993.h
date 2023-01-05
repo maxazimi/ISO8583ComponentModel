@@ -2,7 +2,6 @@
 #define ISO1993_H
 
 #include "Iso.h"
-#include "Helper.h"
 
 class Iso1993 : public Iso
 {

@@ -36,7 +36,7 @@ void IsoParser::Parse()
     mMti = std::stoi(mTxnString.substr(5, 3));
 
     std::string bitmapStr = mTxnString.substr(8, 32);
-    std::vector<uint8_t> bitmap = Helper::HexToBytes(bitmapStr);
+    std::vector<uint8_t> bitmap = Util::HexToBytes(bitmapStr);
 
     mIndex += 40;
 

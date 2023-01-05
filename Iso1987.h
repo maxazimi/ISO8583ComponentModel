@@ -2,7 +2,6 @@
 #define ISO1987_H
 
 #include "Iso.h"
-#include "Helper.h"
 
 class Iso1987 : public Iso
 {
