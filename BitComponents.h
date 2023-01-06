@@ -64,22 +64,22 @@ class Bit004Component : public Component
     {
         Component::GetBit();
 
-        auto mTxnAmt = 9999999999999999;
-        auto mCurrencyCode = 0;
-        auto mFloatDigits = 0;
+        auto txnAmt = 9999999999999.999;
+        auto currencyCode = 0;
+        auto floatDigits = 0;
 
-        if (mSubBitStrVec.size() == 1)
+        if (mSubBitStrVec.size() == 1) // ISO1987
         {
-            mTxnAmt = std::stoull(mBitString); // ISO1987
+            txnAmt = Util::CalcAmount(mBitString, floatDigits);
         }
-        else if (mSubBitStrVec.size() == 3) //ISO2003
+        else if (mSubBitStrVec.size() == 3) // ISO2003
         {
-            mCurrencyCode = std::stoi(mSubBitStrVec[0]);
-            mFloatDigits = std::stoi(mSubBitStrVec[1]);
-            mTxnAmt = std::stoull(mSubBitStrVec[2]);
+            currencyCode = std::stoi(mSubBitStrVec[0]);
+            floatDigits = std::stoi(mSubBitStrVec[1]);
+            txnAmt = Util::CalcAmount(mSubBitStrVec[2], floatDigits);
         }
 
-        mOwner->SetTxnAmount(mTxnAmt, mFloatDigits, mCurrencyCode);
+        mOwner->SetTxnAmount(txnAmt, currencyCode);
     }
 };
 
@@ -98,22 +98,22 @@ class Bit005Component : public Component
     {
         Component::GetBit();
 
-        auto mSettleAmt = 9999999999999999;
-        int mCurrencyCode = 0;
-        int mFloatDigits = 0;
+        auto settleAmt = 9999999999999.999;
+        auto currencyCode = 0;
+        auto floatDigits = 0;
 
-        if (mSubBitStrVec.size() == 1)
+        if (mSubBitStrVec.size() == 1) // ISO1987
         {
-            mSettleAmt = std::stoull(mBitString); // ISO1987
+            settleAmt = Util::CalcAmount(mBitString, floatDigits);
         }
         else if (mSubBitStrVec.size() == 3) //ISO2003
         {
-            mCurrencyCode = std::stoi(mSubBitStrVec[0]);
-            mFloatDigits = std::stoi(mSubBitStrVec[1]);
-            mSettleAmt = std::stoull(mSubBitStrVec[2]);
+            currencyCode = std::stoi(mSubBitStrVec[0]);
+            floatDigits = std::stoi(mSubBitStrVec[1]);
+            settleAmt = Util::CalcAmount(mSubBitStrVec[2], floatDigits);
         }
 
-        mOwner->SetSettlementAmount(mSettleAmt, mFloatDigits, mCurrencyCode);
+        mOwner->SetSettlementAmount(settleAmt, currencyCode);
     }
 };
 
@@ -132,22 +132,22 @@ class Bit006Component : public Component
     {
         Component::GetBit();
 
-        auto mBillAmt = 9999999999999999;
-        int mCurrencyCode = 0;
-        int mFloatDigits = 0;
+        auto billAmt = 9999999999999.999;
+        auto currencyCode = 0;
+        auto floatDigits = 0;
 
-        if (mSubBitStrVec.size() == 1)
+        if (mSubBitStrVec.size() == 1) // ISO1987
         {
-            mBillAmt = std::stoull(mBitString); // ISO1987
+            billAmt = Util::CalcAmount(mBitString, floatDigits);
         }
         else if (mSubBitStrVec.size() == 3) //ISO2003
         {
-            mCurrencyCode = std::stoi(mSubBitStrVec[0]);
-            mFloatDigits = std::stoi(mSubBitStrVec[1]);
-            mBillAmt = std::stoull(mSubBitStrVec[2]);
+            currencyCode = std::stoi(mSubBitStrVec[0]);
+            floatDigits = std::stoi(mSubBitStrVec[1]);
+            billAmt = Util::CalcAmount(mSubBitStrVec[2], floatDigits);
         }
 
-        mOwner->SetBillingAmount(mBillAmt, mFloatDigits, mCurrencyCode);
+        mOwner->SetCardholderBillingAmount(billAmt, currencyCode);
     }
 };
 
@@ -165,6 +165,18 @@ public:
     void GetBit() override
     {
         Component::GetBit();
+
+        /*
+         * MMDDhhmmss
+         */
+        IsoDateTime trxDateTime;
+        trxDateTime.MM = std::stoi(mBitString.substr(0, 2));
+        trxDateTime.DD = std::stoi(mBitString.substr(2, 4));
+        trxDateTime.hh = std::stoi(mBitString.substr(4, 6));
+        trxDateTime.mm = std::stoi(mBitString.substr(6, 8));
+        trxDateTime.ss = std::stoi(mBitString.substr(8, 10));
+
+        mOwner->SetTransmissionDateTime(trxDateTime);
     }
 };
 

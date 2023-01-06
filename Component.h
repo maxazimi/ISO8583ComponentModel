@@ -13,12 +13,13 @@ class Component
     int GetProcessOrder() const { return mProcessOrder; }
 
     void SetBitString(std::string& bitString) { mBitString = bitString; }
-    std::string GetBitString() { return mBitString; }
+    std::string& GetBitString() { return mBitString; }
     
     int GetBitNumber() { return mBitNumber; }
 
     virtual void GetBit();
     virtual void CheckInfo() {}
+    virtual void PutBit() {}
 
     virtual void ConvertToIso2003() {}
     virtual void ConvertFromIso2003() {}

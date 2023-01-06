@@ -20,6 +20,11 @@ public:
         }
         return bytes;
     }
+
+    static double CalcAmount(std::string& strAmount, int floatDigits)
+    {
+        return std::stod(strAmount);
+    }
 };
 
 #endif // UTIL_H

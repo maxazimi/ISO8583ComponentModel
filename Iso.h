@@ -1,48 +1,7 @@
 #ifndef ISO_H
 #define ISO_H
 
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <map>
-
-enum
-{
-    ISO1987_07 = 0,
-    ISO1987_08,
-    ISO1993_07,
-    ISO1993_08,
-    ISO2003_07,
-    ISO2003_08,
-    ISO2003_SH,
-    ISO2003_SP
-};
-
-typedef enum
-{
-    FIXED = 0,
-    LVAR,
-    LLVAR,
-    LLLVAR,
-    LLLLVAR
-} format_t;
-
-struct SubSpec
-{
-    int id;
-    std::string type;
-    int size;
-};
-
-struct BitSpec
-{
-    int id;
-    format_t format;
-    std::string type;
-    int size;
-    int max_size;
-    std::vector<SubSpec> subSpec;
-};
+#include "IsoTypes.h"
 
 class Iso
 {
@@ -64,7 +23,7 @@ public:
 	void AddComponent(class Component* component);
 	void RemoveComponent(class Component* component);
 
-    virtual bool CheckFormat(const std::string& data, int bitNumber)
+    virtual bool CheckFormat(const std::string& data, int bitNumber) // incomplete
     {
         return true;
 
@@ -83,7 +42,7 @@ public:
         printf( "\n"
                 "Pan: %llu\n"
                 "PrCode: %u %u %u\n"
-                "TransactionAmount: %llu\n\n",
+                "TransactionAmount: %lf\n\n",
                 mPan,
                 mPrCode[0], mPrCode[1], mPrCode[2],
                 mTransactionAmount);
@@ -97,26 +56,26 @@ public: // ISO message Getter/Setter methods
     void SetPrCode(std::vector<T>& data) { mPrCode = data; }
 
     template<typename T>
-    void SetTxnAmount(T& amount, int floatDigits, int currencyCode)
+    void SetTxnAmount(T& amount, int currencyCode)
     {
         mTransactionAmount = amount;
-        int dummy = floatDigits;
         mTxnCurrencyCode = currencyCode;
     }
     template<typename T>
-    void SetSettlementAmount(T& amount, int floatDigits, int currencyCode)
+    void SetSettlementAmount(T& amount, int currencyCode)
     {
         mSettlementAmount = amount;
-        int dummy = floatDigits;
         mSettleCurrencyCode = currencyCode;
     }
     template<typename T>
-    void SetBillingAmount(T& amount, int floatDigits, int currencyCode)
+    void SetCardholderBillingAmount(T& amount, int currencyCode)
     {
-        mBillingAmount = amount;
-        int dummy = floatDigits;
+        mCardholderBillingAmount = amount;
         mBillCurrencyCode = currencyCode;
     }
+
+    template<typename T>
+    void SetTransmissionDateTime(T& trxDateTime) { mTrxDateTime = trxDateTime; }
 
 protected:
     std::vector<BitSpec> mBitSpecVec;
@@ -131,15 +90,17 @@ private:
     int mParseIndex = 0;
 
 private: // ISO message fields
-    uint64_t mPan;
-    std::vector<uint8_t> mPrCode;
+    uint64_t mPan;                      /* FD-002 */
+    std::vector<uint8_t> mPrCode;       /* FD-003 */
 
-    uint64_t mTransactionAmount;
+    double mTransactionAmount;          /* FD-004 */
     int mTxnCurrencyCode;
-    uint64_t mSettlementAmount;
+    double mSettlementAmount;           /* FD-005 */
     int mSettleCurrencyCode;
-    uint64_t mBillingAmount;
+    double mCardholderBillingAmount;    /* FD-006 */
     int mBillCurrencyCode;
+
+    IsoDateTime mTrxDateTime;           /* FD-007 */
 };
 
 #endif // ISO_H
