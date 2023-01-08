@@ -9,9 +9,9 @@ class Iso1993 : public Iso
     Iso1993(class IsoParser* isoParser) : Iso(isoParser)
     {
         mBitSpecVec = {
-			{0, FIXED, "B", 0, 0}, // dummy
-            {1, FIXED, "B", 8, 8}, // bitmap
-			{2, LLVAR, "N", 0, 19}, // PAN
+			{0, FIXED, "B", 0, 0}, 	/* dummy */
+            {1, FIXED, "B", 8, 8}, 	/* bitmap */
+			{2, LLVAR, "N", 0, 19}, /* PAN */
 			{3, FIXED, "N", 6, 6, {{1, "N", 2}, {2, "N", 2}, {3, "N", 2}}},
 			{4, FIXED, "N", 12, 12},
 			{5, FIXED, "N", 12, 12},

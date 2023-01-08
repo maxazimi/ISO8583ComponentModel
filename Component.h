@@ -5,7 +5,7 @@
 
 class Component
 {
-  public:
+public:
     Component(class Iso* owner, int bitNumber = 0);
     virtual ~Component();
 
@@ -24,7 +24,16 @@ class Component
     virtual void ConvertToIso2003() {}
     virtual void ConvertFromIso2003() {}
 
-  protected:
+private:
+    void SetError(const std::string& errStr)
+    {
+        mErrors.emplace_back(errStr);
+        printf("Error[from Bit%00d]: %s\n", mBitNumber, errStr.c_str());
+    }
+
+    int CalcTotalSubfieldSize();
+
+protected:
     // Owning iso
     class Iso* mOwner;
 
@@ -34,6 +43,7 @@ class Component
     BitSpec mBitSpec;
     std::string mBitString;
     std::vector<std::string> mSubBitStrVec;
+    std::vector<std::string> mErrors;
 };
 
 #endif // COMPONENT_H
