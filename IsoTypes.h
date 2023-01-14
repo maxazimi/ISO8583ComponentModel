@@ -32,6 +32,7 @@ typedef enum
  */
 struct IsoDateTime
 {
+    int CC;
     int YY;
     int MM;
     int DD;

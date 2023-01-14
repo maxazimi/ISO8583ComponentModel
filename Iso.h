@@ -93,6 +93,7 @@ private: // ISO message fields
     uint64_t mPan;                      /* FD-002 */
     std::vector<uint8_t> mPrCode;       /* FD-003 */
 
+    int mFloatDigits;
     double mTransactionAmount;          /* FD-004 */
     int mTxnCurrencyCode;
     double mSettlementAmount;           /* FD-005 */
