@@ -2,6 +2,7 @@
 #define ISO_H
 
 #include "IsoTypes.h"
+#include "Util.h"
 
 class Iso
 {
@@ -27,13 +28,13 @@ public:
     {
         return true;
 
-        std::string format = mBitSpecVec.at(bitNumber).type;
-        for (auto& c : format)
-        {
-            size_t found = data.find(c);
-            if (found != std::string::npos)
-                ;
-        }
+        // std::string format = mBitSpecVec.at(bitNumber).type;
+        // for (auto& c : format)
+        // {
+        //     size_t found = data.find(c);
+        //     if (found != std::string::npos)
+        //         ;
+        // }
     }
 
     void Process(); // not overridable
@@ -49,36 +50,26 @@ public:
     }
 
 public: // ISO message Getter/Setter methods
-    template<typename T>
-    void SetPan(T data) { mPan = data; }
-
-    template<typename T>
-    void SetPrCode(std::vector<T>& data) { mPrCode = data; }
-
-    template<typename T>
-    void SetTxnAmount(T& amount, int currencyCode)
+    void SetField002(std::string& str) { mPan = std::stoul(str); }
+    void SetField003(std::vector<std::string>& vec)
     {
-        mTransactionAmount = amount;
-        mTxnCurrencyCode = currencyCode;
+        for (auto& subStr : vec)
+            mPrCode.emplace_back(std::stoi(subStr));
     }
-    template<typename T>
-    void SetSettlementAmount(T& amount, int currencyCode)
+    virtual void SetField004(std::vector<std::string>& vec)
     {
-        mSettlementAmount = amount;
-        mSettleCurrencyCode = currencyCode;
+        mTransactionAmount = Util::CalcAmount(vec[0], 0);
     }
-    template<typename T>
-    void SetCardholderBillingAmount(T& amount, int currencyCode)
+    virtual void SetField005(std::vector<std::string>& vec)
     {
-        mCardholderBillingAmount = amount;
-        mBillCurrencyCode = currencyCode;
+        mSettlementAmount = Util::CalcAmount(vec[0], 0);
     }
-
-    template<typename T>
-    void SetTransmissionDateTime(T& trxDateTime) { mTrxDateTime = trxDateTime; }
-
-protected:
-    std::vector<BitSpec> mBitSpecVec;
+    virtual void SetField006(std::vector<std::string>& vec)
+    {
+        mCardholderBillingAmount = Util::CalcAmount(vec[0], 0);
+    }
+    virtual void SetField007(IsoDateTime& trxDateTime) { mTrxDateTime = trxDateTime; }
+    virtual void SetField024(std::string& str) { mFunctionCode = std::stoi(str); }
 
 private:
     class IsoParser* mOwner;
@@ -89,17 +80,23 @@ private:
     int mIsoStandard = 0;
     int mParseIndex = 0;
 
-private: // ISO message fields
+protected:
+    std::vector<BitSpec> mBitSpecVec;
+
+protected: // ISO message fields
     uint64_t mPan;                      /* FD-002 */
     std::vector<uint8_t> mPrCode;       /* FD-003 */
 
-    int mFloatDigits;
+    int mFloatDigits = 0;
     double mTransactionAmount;          /* FD-004 */
     int mTxnCurrencyCode;
     double mSettlementAmount;           /* FD-005 */
     int mSettleCurrencyCode;
     double mCardholderBillingAmount;    /* FD-006 */
     int mBillCurrencyCode;
+
+    int mNetInternationalId;            /* FD-024 */
+    int mFunctionCode;                  /* FD-024 */
 
     IsoDateTime mTrxDateTime;           /* FD-007 */
 };

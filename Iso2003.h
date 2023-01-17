@@ -141,7 +141,27 @@ class Iso2003 : public Iso
         };
     }
 
-  private:
+public: // ISO message Getter/Setter methods (ISO-2003)
+    void SetField004(std::vector<std::string>& vec) override
+    {
+		mTxnCurrencyCode = std::stoi(vec[0]);
+		auto floatDigits = std::stoi(vec[1]);
+		mTransactionAmount = Util::CalcAmount(vec[2], floatDigits);
+    }
+	void SetField005(std::vector<std::string>& vec) override
+    {
+        mSettlementAmount = std::stoi(vec[0]);
+		auto floatDigits = std::stoi(vec[1]);
+        mSettleCurrencyCode = Util::CalcAmount(vec[2], floatDigits);
+    }
+	void SetField006(std::vector<std::string>& vec) override
+    {
+		mCardholderBillingAmount = std::stoi(vec[0]);
+		auto floatDigits = std::stoi(vec[1]);
+        mBillCurrencyCode = Util::CalcAmount(vec[2], floatDigits);
+    }
+
+private:
 };
 
 class Iso2003_07 : public Iso2003

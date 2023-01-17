@@ -20,9 +20,7 @@ class Bit002Component : public Component
     void GetBit() override
     {
         Component::GetBit();
-
-        auto pan = std::stoul(mBitString);
-        mOwner->SetPan(pan);
+        mOwner->SetField002(mBitString);
     }
 };
 
@@ -40,12 +38,7 @@ class Bit003Component : public Component
     void GetBit() override
     {
         Component::GetBit();
-
-        std::vector<uint8_t> prCode;
-        for (auto& subStr : mSubBitStrVec)
-            prCode.emplace_back(std::stoi(subStr));
-
-        mOwner->SetPrCode(prCode);
+        mOwner->SetField003(mSubBitStrVec);
     }
 };
 
@@ -63,23 +56,7 @@ class Bit004Component : public Component
     void GetBit() override
     {
         Component::GetBit();
-
-        auto txnAmt = 9999999999999.999;
-        auto currencyCode = 0;
-        auto floatDigits = 0;
-
-        if (mSubBitStrVec.size() == 1) // ISO1987
-        {
-            txnAmt = Util::CalcAmount(mBitString, floatDigits);
-        }
-        else if (mSubBitStrVec.size() == 3) // ISO2003
-        {
-            currencyCode = std::stoi(mSubBitStrVec[0]);
-            floatDigits = std::stoi(mSubBitStrVec[1]);
-            txnAmt = Util::CalcAmount(mSubBitStrVec[2], floatDigits);
-        }
-
-        mOwner->SetTxnAmount(txnAmt, currencyCode);
+        mOwner->SetField004(mSubBitStrVec);
     }
 };
 
@@ -97,23 +74,7 @@ class Bit005Component : public Component
     void GetBit() override
     {
         Component::GetBit();
-
-        auto settleAmt = 9999999999999.999;
-        auto currencyCode = 0;
-        auto floatDigits = 0;
-
-        if (mSubBitStrVec.size() == 1) // ISO1987
-        {
-            settleAmt = Util::CalcAmount(mBitString, floatDigits);
-        }
-        else if (mSubBitStrVec.size() == 3) //ISO2003
-        {
-            currencyCode = std::stoi(mSubBitStrVec[0]);
-            floatDigits = std::stoi(mSubBitStrVec[1]);
-            settleAmt = Util::CalcAmount(mSubBitStrVec[2], floatDigits);
-        }
-
-        mOwner->SetSettlementAmount(settleAmt, currencyCode);
+        mOwner->SetField005(mSubBitStrVec);
     }
 };
 
@@ -131,23 +92,7 @@ class Bit006Component : public Component
     void GetBit() override
     {
         Component::GetBit();
-
-        auto billAmt = 9999999999999.999;
-        auto currencyCode = 0;
-        auto floatDigits = 0;
-
-        if (mSubBitStrVec.size() == 1) // ISO1987
-        {
-            billAmt = Util::CalcAmount(mBitString, floatDigits);
-        }
-        else if (mSubBitStrVec.size() == 3) //ISO2003
-        {
-            currencyCode = std::stoi(mSubBitStrVec[0]);
-            floatDigits = std::stoi(mSubBitStrVec[1]);
-            billAmt = Util::CalcAmount(mSubBitStrVec[2], floatDigits);
-        }
-
-        mOwner->SetCardholderBillingAmount(billAmt, currencyCode);
+        mOwner->SetField006(mSubBitStrVec);
     }
 };
 
@@ -176,7 +121,7 @@ public:
         trxDateTime.mm = std::stoi(mBitString.substr(6, 8));
         trxDateTime.ss = std::stoi(mBitString.substr(8, 10));
 
-        mOwner->SetTransmissionDateTime(trxDateTime);
+        mOwner->SetField007(trxDateTime);
     }
 };
 
@@ -466,6 +411,7 @@ public:
     void GetBit() override
     {
         Component::GetBit();
+        mOwner->SetField024(mBitString);
     }
 };
 

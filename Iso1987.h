@@ -152,6 +152,9 @@ public:
         SetIsoStandard(ISO1987_07);
     }
 
+public: // ISO message Getter/Setter methods (ISO-1987)
+    void SetField024(std::string& str) override { mNetInternationalId = std::stoi(str); }
+
 private:
 };
 
