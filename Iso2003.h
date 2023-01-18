@@ -141,24 +141,41 @@ class Iso2003 : public Iso
         };
     }
 
+public:
+	void ConvertField022() override {}
+	void ConvertField025() override {}
+	void ConvertField026() override {}
+	void ConvertField039() override {}
+	void ConvertField048() override {}
+	void ConvertField062() override {}
+	void ConvertField070() override {}
+	void ConvertField090() override {}
+
 public: // ISO message Getter/Setter methods (ISO-2003)
-    void SetField004(std::vector<std::string>& vec) override
+    void SetField004(const std::vector<std::string>& vec) override
     {
 		mTxnCurrencyCode = std::stoi(vec[0]);
 		auto floatDigits = std::stoi(vec[1]);
 		mTransactionAmount = Util::CalcAmount(vec[2], floatDigits);
     }
-	void SetField005(std::vector<std::string>& vec) override
+
+	void SetField005(const std::vector<std::string>& vec) override
     {
         mSettlementAmount = std::stoi(vec[0]);
 		auto floatDigits = std::stoi(vec[1]);
         mSettleCurrencyCode = Util::CalcAmount(vec[2], floatDigits);
     }
-	void SetField006(std::vector<std::string>& vec) override
+
+	void SetField006(const std::vector<std::string>& vec) override
     {
 		mCardholderBillingAmount = std::stoi(vec[0]);
 		auto floatDigits = std::stoi(vec[1]);
         mBillCurrencyCode = Util::CalcAmount(vec[2], floatDigits);
+    }
+
+	void SetField022(const std::string& str) override
+    {
+        mPosDataCode = Util::HexStringToVectorValue<uint32_t>(str);
     }
 
 private:

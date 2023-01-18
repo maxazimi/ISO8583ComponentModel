@@ -49,27 +49,45 @@ public:
                 mTransactionAmount);
     }
 
+public:
+    virtual void ConvertField022() {}
+	virtual void ConvertField025() {}
+	virtual void ConvertField026() {}
+	virtual void ConvertField039() {}
+	virtual void ConvertField048() {}
+	virtual void ConvertField062() {}
+	virtual void ConvertField070() {}
+	virtual void ConvertField090() {}
+
 public: // ISO message Getter/Setter methods
-    void SetField002(std::string& str) { mPan = std::stoul(str); }
-    void SetField003(std::vector<std::string>& vec)
+    void SetField002(const std::string& str) { mPan = std::stoul(str); }
+
+    void SetField003(const std::vector<std::string>& vec)
     {
         for (auto& subStr : vec)
             mPrCode.emplace_back(std::stoi(subStr));
     }
-    virtual void SetField004(std::vector<std::string>& vec)
+
+    virtual void SetField004(const std::vector<std::string>& vec)
     {
         mTransactionAmount = Util::CalcAmount(vec[0], 0);
     }
-    virtual void SetField005(std::vector<std::string>& vec)
+
+    virtual void SetField005(const std::vector<std::string>& vec)
     {
         mSettlementAmount = Util::CalcAmount(vec[0], 0);
     }
-    virtual void SetField006(std::vector<std::string>& vec)
+
+    virtual void SetField006(const std::vector<std::string>& vec)
     {
         mCardholderBillingAmount = Util::CalcAmount(vec[0], 0);
     }
-    virtual void SetField007(IsoDateTime& trxDateTime) { mTrxDateTime = trxDateTime; }
-    virtual void SetField024(std::string& str) { mFunctionCode = std::stoi(str); }
+
+    virtual void SetField007(const IsoDateTime& trxDateTime) { mTrxDateTime = trxDateTime; }
+
+    virtual void SetField022(const std::string& str) = 0; // different implementations (convert required)
+
+    virtual void SetField024(const std::string& str) { mFunctionCode = std::stoi(str); }
 
 private:
     class IsoParser* mOwner;
@@ -94,6 +112,9 @@ protected: // ISO message fields
     int mSettleCurrencyCode;
     double mCardholderBillingAmount;    /* FD-006 */
     int mBillCurrencyCode;
+
+    //PosDataCode mPosDataCode;           /* FD-022 */
+    std::vector<uint32_t> mPosDataCode; /* FD-022 */
 
     int mNetInternationalId;            /* FD-024 */
     int mFunctionCode;                  /* FD-024 */

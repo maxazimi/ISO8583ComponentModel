@@ -31,7 +31,7 @@ class Iso1987 : public Iso
             {19, FIXED, "N", 3, 3},
             {20, FIXED, "N", 3, 3},
             {21, FIXED, "N", 3, 3},
-            {22, FIXED, "N", 3, 3},
+            {22, FIXED, "N", 3, 3, {{1, "N", 2}, {2, "N", 1}}},
             {23, FIXED, "N", 3, 3},
             {24, FIXED, "N", 3, 3},
             {25, FIXED, "N", 2, 2},
@@ -141,7 +141,11 @@ class Iso1987 : public Iso
         };
     }
 
-  private:
+public: // ISO message Getter/Setter methods (ISO-1987)
+    void SetField022(const std::string& str) override
+    {
+    }
+    void SetField024(const std::string& str) override { mNetInternationalId = std::stoi(str); }
 };
 
 class Iso1987_07 : public Iso1987
@@ -151,11 +155,6 @@ public:
     {
         SetIsoStandard(ISO1987_07);
     }
-
-public: // ISO message Getter/Setter methods (ISO-1987)
-    void SetField024(std::string& str) override { mNetInternationalId = std::stoi(str); }
-
-private:
 };
 
 class Iso1987_08 : public Iso1987
@@ -165,8 +164,6 @@ public:
     {
         SetIsoStandard(ISO1987_08);
     }
-
-private:
 };
 
 #endif // ISO1987_H

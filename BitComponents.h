@@ -377,6 +377,7 @@ public:
     void GetBit() override
     {
         Component::GetBit();
+        mOwner->SetField022(mBitString);
     }
 };
 

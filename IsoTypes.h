@@ -41,6 +41,17 @@ struct IsoDateTime
     int ss;
 };
 
+/*
+ * FD-022 ISO-2003
+ */
+struct PosDataCode
+{
+    uint8_t cardReadingMethod;
+    uint8_t cardholderVerificationMethod;
+    uint8_t posEnvironment;
+    uint8_t securityCharacteristics;
+};
+
 struct SubSpec
 {
     int id;

@@ -8,20 +8,45 @@
 class Util
 {
 public:
-    static std::vector<uint8_t> HexToBytes(const std::string& hexStr)
+    template<typename T>
+    static T HexStringToValue(const std::string& hexStr)
     {
-        std::vector<uint8_t> bytes;
-
-        for (unsigned int i = 0; i < hexStr.length(); i += 2)
+        if (hexStr.length() / 2 != sizeof(T))
+            throw std::logic_error("output size does not match with the input size");
+        
+        T element = 0;
+        for (int i = 0; i < sizeof(T); i++)
         {
-            std::string byteString = hexStr.substr(i, 2);
-            uint8_t byte = (uint8_t) strtol(byteString.c_str(), nullptr, 16);
-            bytes.push_back(byte);
+            std::string byteString = hexStr.substr(i * 2, 2);
+            auto slice = (uint8_t) strtol(byteString.c_str(), nullptr, 16);
+            element |= (slice << i);
         }
-        return bytes;
+            
+        return element;
     }
 
-    static double CalcAmount(std::string& strAmount, int floatDigits)
+    template<typename T>
+    static std::vector<T> HexStringToVectorValue(const std::string& hexStr)
+    {
+        std::vector<T> vec;
+
+        for (int i = 0; i < hexStr.length(); i += 2)
+        {
+            std::string byteString = hexStr.substr(i, 2);
+            T element = 0;
+
+            for (int sub = 0; sub < sizeof(T); sub++)
+            {
+                auto slice = (uint8_t) strtol(byteString.c_str(), nullptr, 16);
+                element |= (slice << sub);
+            }
+
+            vec.emplace_back(element);
+        }
+        return vec;
+    }
+
+    static double CalcAmount(const std::string& strAmount, const int floatDigits)
     {
         return std::stod(strAmount);
     }

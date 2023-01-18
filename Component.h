@@ -21,9 +21,6 @@ public:
     virtual void CheckInfo() {}
     virtual void PutBit() {}
 
-    virtual void ConvertToIso2003() {}
-    virtual void ConvertFromIso2003() {}
-
 private:
     void SetError(const std::string& errStr)
     {

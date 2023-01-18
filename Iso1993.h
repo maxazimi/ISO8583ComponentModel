@@ -141,7 +141,12 @@ class Iso1993 : public Iso
         };
     }
 
-  private:
+public: // ISO message Getter/Setter methods (ISO-1993)
+    void SetField022(const std::string& str) override
+    {
+    }
+
+private:
 };
 
 class Iso1993_07 : public Iso1993
@@ -151,8 +156,6 @@ public:
     {
         SetIsoStandard(ISO1993_07);
     }
-
-private:
 };
 
 class Iso1993_08 : public Iso1993
@@ -162,8 +165,6 @@ public:
     {
         SetIsoStandard(ISO1993_08);
     }
-
-private:
 };
 
 #endif // ISO1993_H
