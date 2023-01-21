@@ -100,6 +100,7 @@ private:
 
 protected:
     std::vector<BitSpec> mBitSpecVec;
+    int mTargetStandard;
 
 protected: // ISO message fields
     uint64_t mPan;                      /* FD-002 */

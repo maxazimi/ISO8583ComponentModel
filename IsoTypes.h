@@ -8,15 +8,22 @@
 
 typedef enum
 {
-    ISO1987_07 = 0,
+	ISO1987 = 0,
+	ISO1993 = 2,
+	ISO2003 = 4
+} iso_std_t;
+
+typedef enum
+{
+	ISO1987_07 = ISO1987,
     ISO1987_08,
-    ISO1993_07,
+    ISO1993_07 = ISO1993,
     ISO1993_08,
-    ISO2003_07,
+    ISO2003_07 = ISO2003,
     ISO2003_08,
     ISO2003_SH,
     ISO2003_SP
-} isostd_t;
+} iso_version_t;
 
 typedef enum
 {

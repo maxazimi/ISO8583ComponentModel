@@ -2,7 +2,8 @@
 #include "IsoParser.h"
 #include "BitComponents.h"
 
-Iso::Iso(IsoParser* isoParser) : mOwner(isoParser)
+Iso::Iso(IsoParser* isoParser) : mOwner(isoParser),
+                                 mTargetStandard(ISO2003)
 {
     mOwner->AddIso(this);
 

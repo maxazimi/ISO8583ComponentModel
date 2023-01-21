@@ -379,6 +379,16 @@ public:
         Component::GetBit();
         mOwner->SetField022(mBitString);
     }
+
+    void CheckInfo() override
+    {
+    	mOwner->ConvertField022();
+    }
+
+    void PutBit() override
+    {
+
+    }
 };
 
 /*

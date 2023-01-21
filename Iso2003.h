@@ -142,7 +142,17 @@ class Iso2003 : public Iso
     }
 
 public:
-	void ConvertField022() override {}
+	void ConvertField022() override
+	{
+    	if (mTargetStandard == ISO1987)
+	    {
+		    return;
+	    }
+		if (mTargetStandard == ISO1993)
+		{
+			return;
+		}
+	}
 	void ConvertField025() override {}
 	void ConvertField026() override {}
 	void ConvertField039() override {}
@@ -161,16 +171,16 @@ public: // ISO message Getter/Setter methods (ISO-2003)
 
 	void SetField005(const std::vector<std::string>& vec) override
     {
-        mSettlementAmount = std::stoi(vec[0]);
+	    mSettleCurrencyCode = std::stoi(vec[0]);
 		auto floatDigits = std::stoi(vec[1]);
-        mSettleCurrencyCode = Util::CalcAmount(vec[2], floatDigits);
+	    mSettlementAmount = Util::CalcAmount(vec[2], floatDigits);
     }
 
 	void SetField006(const std::vector<std::string>& vec) override
     {
-		mCardholderBillingAmount = std::stoi(vec[0]);
+	    mBillCurrencyCode = std::stoi(vec[0]);
 		auto floatDigits = std::stoi(vec[1]);
-        mBillCurrencyCode = Util::CalcAmount(vec[2], floatDigits);
+	    mCardholderBillingAmount = Util::CalcAmount(vec[2], floatDigits);
     }
 
 	void SetField022(const std::string& str) override
