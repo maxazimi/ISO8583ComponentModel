@@ -17,9 +17,8 @@ Iso::Iso(IsoParser* isoParser) : mOwner(isoParser),
 Iso::~Iso()
 {
     mOwner->RemoveIso(this);
-
-    for (auto itr = mComponents.begin(); itr != mComponents.end(); ++itr)
-        delete itr->second;
+    
+    mOwner->HoldComponents(mComponents);
     mComponents.clear();
 }
 

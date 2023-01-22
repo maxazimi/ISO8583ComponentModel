@@ -9,7 +9,7 @@ class IsoParser // Engine
 {
 public:
     IsoParser(std::string txnString = "");
-    ~IsoParser() = default;
+    ~IsoParser();
 
     void SetTxnString(std::string& txnString) { mTxnString = txnString; }
     std::string& GetTxnString() { return mTxnString; }
@@ -19,11 +19,25 @@ public:
     void AddIso(class Iso* iso);
     void RemoveIso(class Iso* iso);
 
+    void HoldComponents(std::map<int, class Component*>& map)
+    {
+        mUnusedComponents = std::move(map);
+        //mUnusedComponents.insert({mIsoInStandard, iso});
+    }
+
+    std::map<int, class Component*>&&
+    TakeComponents()
+    {
+        return std::move(mUnusedComponents);
+    }
+
 	void IsoInstantiate();
     void Parse();
 
 private:
     std::map<int, class Iso*> mIsos;
+    std::map<int, class Component*> mUnusedComponents;
+
     int mIsoInStandard;
     int mIndex;
 

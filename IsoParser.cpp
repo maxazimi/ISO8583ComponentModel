@@ -10,6 +10,13 @@ IsoParser::IsoParser(std::string txnString)
     mIsoInStandard = 0;
 }
 
+IsoParser::~IsoParser()
+{
+    for (auto itr = mUnusedComponents.begin(); itr != mUnusedComponents.end(); ++itr)
+        delete itr->second;
+    mUnusedComponents.clear();
+}
+
 void IsoParser::AddIso(Iso* iso)
 {
 	mIsos.insert({mIsoInStandard, iso});
