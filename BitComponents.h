@@ -22,6 +22,12 @@ class Bit002Component : public Component
         Component::GetBit();
         mOwner->SetField002(mBitString);
     }
+
+    void PutBit() override
+    {
+        mOutFieldString = ConvertToString(mOwner->GetField002());
+        mOwner->AppendFieldString(mOutFieldString);
+    }
 };
 
 /*
@@ -40,6 +46,12 @@ class Bit003Component : public Component
         Component::GetBit();
         mOwner->SetField003(mSubBitStrVec);
     }
+
+    void PutBit() override
+    {
+        mOutFieldString = ConvertToString(mOwner->GetField003());
+        mOwner->AppendFieldString(mOutFieldString);
+    }
 };
 
 /*
@@ -57,6 +69,12 @@ class Bit004Component : public Component
     {
         Component::GetBit();
         mOwner->SetField004(mSubBitStrVec);
+    }
+
+    void PutBit() override
+    {
+        mOutFieldString = mOwner->GetField004();
+        mOwner->AppendFieldString(mOutFieldString);
     }
 };
 
@@ -378,11 +396,6 @@ public:
     {
         Component::GetBit();
         mOwner->SetField022(mBitString);
-    }
-
-    void CheckInfo() override
-    {
-    	mOwner->ConvertField022();
     }
 
     void PutBit() override

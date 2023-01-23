@@ -145,24 +145,24 @@ public: // ISO message Getter/Setter methods (ISO-1987)
     void SetField022(const std::string& str) override
     {
     }
-    void SetField024(const std::string& str) override { mNetInternationalId = std::stoi(str); }
+    void SetField024(const std::string& str) override { mMsg.mNetInternationalId = std::stoi(str); }
 };
 
-class Iso1987_07 : public Iso1987
+class Iso1987_01 : public Iso1987
 {
 public:
-    Iso1987_07(class IsoParser* isoParser) : Iso1987(isoParser)
+    Iso1987_01(class IsoParser* isoParser) : Iso1987(isoParser)
     {
-        SetIsoStandard(ISO1987_07);
+        SetIsoStandard(ISO1987_01);
     }
 };
 
-class Iso1987_08 : public Iso1987
+class Iso1987_02 : public Iso1987
 {
 public:
-    Iso1987_08(class IsoParser* isoParser) : Iso1987(isoParser)
+    Iso1987_02(class IsoParser* isoParser) : Iso1987(isoParser)
     {
-        SetIsoStandard(ISO1987_08);
+        SetIsoStandard(ISO1987_02);
     }
 };
 

@@ -149,21 +149,21 @@ public: // ISO message Getter/Setter methods (ISO-1993)
 private:
 };
 
-class Iso1993_07 : public Iso1993
+class Iso1993_01 : public Iso1993
 {
 public:
-    Iso1993_07(class IsoParser* isoParser) : Iso1993(isoParser)
+    Iso1993_01(class IsoParser* isoParser) : Iso1993(isoParser)
     {
-        SetIsoStandard(ISO1993_07);
+        SetIsoStandard(ISO1993_01);
     }
 };
 
-class Iso1993_08 : public Iso1993
+class Iso1993_02 : public Iso1993
 {
 public:
-    Iso1993_08(class IsoParser* isoParser) : Iso1993(isoParser)
+    Iso1993_02(class IsoParser* isoParser) : Iso1993(isoParser)
     {
-        SetIsoStandard(ISO1993_08);
+        SetIsoStandard(ISO1993_02);
     }
 };
 

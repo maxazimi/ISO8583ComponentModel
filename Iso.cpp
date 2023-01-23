@@ -52,12 +52,26 @@ void Iso::RemoveComponent(Component* component)
     }
 }
 
-void Iso::Process()
+void Iso::Parse()
 {
     mParseIndex = mOwner->GetIndex();
     for (auto& com : mComponents)
     {
         if (mBitmap[com.first - 1])
+        {
             com.second->GetBit();
+        }
+    }
+}
+
+void Iso::Build()
+{
+    mParseIndex = mOwner->GetIndex();
+    for (auto& com : mComponents)
+    {
+        if (mBitmap[com.first - 1])
+        {
+            com.second->PutBit();
+        }
     }
 }

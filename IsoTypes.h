@@ -15,14 +15,12 @@ typedef enum
 
 typedef enum
 {
-	ISO1987_07 = ISO1987,
-    ISO1987_08,
-    ISO1993_07 = ISO1993,
-    ISO1993_08,
-    ISO2003_07 = ISO2003,
-    ISO2003_08,
-    ISO2003_SH,
-    ISO2003_SP
+	ISO1987_01 = ISO1987,
+    ISO1987_02,
+    ISO1993_01 = ISO1993,
+    ISO1993_02,
+    ISO2003_01 = ISO2003,
+    ISO2003_02
 } iso_version_t;
 
 typedef enum
@@ -46,6 +44,13 @@ struct IsoDateTime
     int hh;
     int mm;
     int ss;
+};
+
+struct Amount
+{
+    int16_t floatDigits;
+    int64_t amount;
+    int16_t currencyCode;
 };
 
 /*

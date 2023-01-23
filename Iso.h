@@ -1,8 +1,7 @@
 #ifndef ISO_H
 #define ISO_H
 
-#include "IsoTypes.h"
-#include "Util.h"
+#include "message.h"
 
 class Iso
 {
@@ -18,7 +17,11 @@ public:
 
     void SetBitmap(std::vector<uint8_t>& bitmap);
     std::vector<bool>& GetBitmap() { return mBitmap; }
+
     std::vector<BitSpec>& GetBitSpecVec() { return mBitSpecVec; }
+
+    void AppendFieldString(std::string& bitString) { mOutputTxnString += bitString; }
+    std::string GetOutputTxnString() const { return mOutputTxnString; }
 
     // Add/remove components
 	void AddComponent(class Component* component);
@@ -37,17 +40,10 @@ public:
         // }
     }
 
-    void Process(); // not overridable
-    void PrintData()
-    {
-        printf( "\n"
-                "Pan: %llu\n"
-                "PrCode: %u %u %u\n"
-                "TransactionAmount: %lf\n\n",
-                mPan,
-                mPrCode[0], mPrCode[1], mPrCode[2],
-                mTransactionAmount);
-    }
+    void Parse(); // not overridable
+    void Build(); // not overridable
+
+    void Print() { mMsg.Print(); }
 
 public:
     virtual void ConvertField022() {}
@@ -60,34 +56,43 @@ public:
 	virtual void ConvertField090() {}
 
 public: // ISO message Getter/Setter methods
-    void SetField002(const std::string& str) { mPan = std::stoul(str); }
+    void SetField002(const std::string& str) { mMsg.mPan = std::stoul(str); }
+    uint64_t GetField002() { return mMsg.mPan; }
 
     void SetField003(const std::vector<std::string>& vec)
     {
-        for (auto& subStr : vec)
-            mPrCode.emplace_back(std::stoi(subStr));
+        mMsg.mPrCode = std::stoi(vec[0] + vec[1] + vec[2]);
     }
+    int32_t GetField003() { return mMsg.mPrCode; }
 
     virtual void SetField004(const std::vector<std::string>& vec)
     {
-        mTransactionAmount = Util::CalcAmount(vec[0], 0);
+        mMsg.mTransactionAmount.amount = std::stoll(vec[0]);
+    }
+    std::string GetField004()
+    {
+        return  Util::ConvertToPaddedString(mMsg.mTransactionAmount.currencyCode, 3) +
+                Util::ConvertToPaddedString(mMsg.mTransactionAmount.floatDigits, 1) +
+                Util::ConvertToPaddedString(mMsg.mTransactionAmount.amount, 12);
     }
 
     virtual void SetField005(const std::vector<std::string>& vec)
     {
-        mSettlementAmount = Util::CalcAmount(vec[0], 0);
+        mMsg.mSettlementAmount.amount = std::stoll(vec[0]);
     }
 
     virtual void SetField006(const std::vector<std::string>& vec)
     {
-        mCardholderBillingAmount = Util::CalcAmount(vec[0], 0);
+        mMsg.mCardholderBillingAmount.amount = std::stoll(vec[0]);
     }
 
-    virtual void SetField007(const IsoDateTime& trxDateTime) { mTrxDateTime = trxDateTime; }
+    virtual void SetField007(const IsoDateTime& trxDateTime) { mMsg.mTrxDateTime = trxDateTime; }
+
+    void SetField010(const int32_t convRate) { mMsg.mCardholderConvRate = convRate; }
 
     virtual void SetField022(const std::string& str) = 0; // different implementations (convert required)
 
-    virtual void SetField024(const std::string& str) { mFunctionCode = std::stoi(str); }
+    virtual void SetField024(const std::string& str) { mMsg.mFunctionCode = std::stoi(str); }
 
 private:
     class IsoParser* mOwner;
@@ -100,27 +105,10 @@ private:
 
 protected:
     std::vector<BitSpec> mBitSpecVec;
+    std::string mOutputTxnString;
     int mTargetStandard;
 
-protected: // ISO message fields
-    uint64_t mPan;                      /* FD-002 */
-    std::vector<uint8_t> mPrCode;       /* FD-003 */
-
-    int mFloatDigits = 0;
-    double mTransactionAmount;          /* FD-004 */
-    int mTxnCurrencyCode;
-    double mSettlementAmount;           /* FD-005 */
-    int mSettleCurrencyCode;
-    double mCardholderBillingAmount;    /* FD-006 */
-    int mBillCurrencyCode;
-
-    //PosDataCode mPosDataCode;           /* FD-022 */
-    std::vector<uint32_t> mPosDataCode; /* FD-022 */
-
-    int mNetInternationalId;            /* FD-024 */
-    int mFunctionCode;                  /* FD-024 */
-
-    IsoDateTime mTrxDateTime;           /* FD-007 */
+    Message mMsg;
 };
 
 #endif // ISO_H

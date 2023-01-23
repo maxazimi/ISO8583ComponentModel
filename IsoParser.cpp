@@ -52,8 +52,8 @@ void IsoParser::Parse()
 
 	// from now on each bit-component will parse its own part of message
 	mIsos.at(mIsoInStandard)->SetBitmap(bitmap);
-	mIsos.at(mIsoInStandard)->Process();
-    mIsos.at(mIsoInStandard)->PrintData();
+	mIsos.at(mIsoInStandard)->Parse();
+    mIsos.at(mIsoInStandard)->Print();
 }
 
 void IsoParser::IsoInstantiate()
@@ -61,32 +61,28 @@ void IsoParser::IsoInstantiate()
     Iso* iso = nullptr;
     switch (mIsoInStandard)
     {
+    case ISO1987_01:
+        iso = new Iso1987_01(this);
+        break;
+    case ISO1987_02:
+        iso = new Iso1987_02(this);
+        break;
+
+    case ISO1993_01:
+        AddIso(new Iso1993_01(this));
+        break;
+    case ISO1993_02:
+        AddIso(new Iso1993_02(this));
+        break;
+
+    case ISO2003_01:
+        AddIso(new Iso2003_01(this));
+        break;
+    case ISO2003_02:
+        AddIso(new Iso2003_02(this));
+        break;
+        
     default:
-    case ISO1987_07:
-        iso = new Iso1987_07(this);
-        break;
-    case ISO1987_08:
-        iso = new Iso1987_08(this);
-        break;
-
-    case ISO1993_07:
-        //AddIso(new Iso1993_07(this));
-        break;
-    case ISO1993_08:
-        //AddIso(new Iso1993_08(this));
-        break;
-
-    case ISO2003_07:
-        //AddIso(new Iso2003(this));
-        break;
-    case ISO2003_08:
-        //AddIso(new Iso2003(this));
-        break;
-    case ISO2003_SH:
-        //AddIso(new Iso2003(this));
-        break;
-    case ISO2003_SP:
-        //AddIso(new Iso2003(this));
         break;
     }
 }

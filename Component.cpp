@@ -6,20 +6,6 @@ Component::Component(Iso* owner, int bitNumber) : mOwner(owner), mBitNumber(bitN
 
 Component::~Component() { mOwner->RemoveComponent(this); }
 
-int Component::CalcTotalSubfieldSize()
-{
-    if (mBitSpec.format != FIXED && mBitSpec.subSpec.size())
-    {
-        int totalSize = 0;
-        for (auto& subSpec : mBitSpec.subSpec)
-        {
-            totalSize += subSpec.size;
-        }
-        return totalSize;
-    }
-    return mBitSpec.max_size;
-}
-
 void Component::GetBit()
 {
     /*
@@ -45,13 +31,13 @@ void Component::GetBit()
     /*
      * Get sub-bit string
      */
-    mSubBitStrVec.clear();
+    mSubBitStrVec.clear(); // cpu-intensive!
     /*
      * Field either contains no sub-fields
      * or the max size of field is not dividable
      * by the total size of sub-fields.
      */
-    if (mBitSpec.subSpec.size() != 0 && CalcTotalSubfieldSize() % biStrLen == 0)
+    if (mBitSpec.subSpec.size() != 0 && CalcTotalSubfieldSize() % biStrLen == 0)  // cpu-intensive!
     {
         /*
          * for each repetition of sub-fields
@@ -72,4 +58,35 @@ void Component::GetBit()
          */
         mSubBitStrVec.emplace_back(mBitString);
     }
+}
+
+void Component::PutBit()
+{
+    /*
+     * Implemented by child components
+     */
+}
+
+int Component::CalcTotalSubfieldSize()
+{
+    if (mBitSpec.format != FIXED && mBitSpec.subSpec.size())
+    {
+        int totalSize = 0;
+        for (auto& subSpec : mBitSpec.subSpec)
+        {
+            totalSize += subSpec.size;
+        }
+        return totalSize;
+    }
+    return mBitSpec.max_size;
+}
+
+std::string Component::ConvertToString(uint64_t val)
+{
+    mBitSpec = mOwner->GetBitSpecVec().at(mBitNumber);
+    
+    if (mBitSpec.format > 0)
+        return Util::ConvertToLxVarString(val, mBitSpec.format);
+    
+    return Util::ConvertToPaddedString(val, mBitSpec.size);
 }

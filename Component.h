@@ -18,8 +18,8 @@ public:
     int GetBitNumber() { return mBitNumber; }
 
     virtual void GetBit();
-    virtual void CheckInfo() {}
-    virtual void PutBit() {}
+    virtual void PutBit();
+    //virtual void CheckInfo() {}
 
 private:
     void SetError(const std::string& errStr)
@@ -31,6 +31,9 @@ private:
     int CalcTotalSubfieldSize();
 
 protected:
+    std::string ConvertToString(uint64_t val);
+
+protected:
     // Owning iso
     class Iso* mOwner;
 
@@ -39,6 +42,8 @@ protected:
 
     BitSpec mBitSpec;
     std::string mBitString;
+    std::string mOutFieldString;
+
     std::vector<std::string> mSubBitStrVec;
     std::vector<std::string> mErrors;
 };

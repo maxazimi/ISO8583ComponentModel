@@ -164,50 +164,50 @@ public:
 public: // ISO message Getter/Setter methods (ISO-2003)
     void SetField004(const std::vector<std::string>& vec) override
     {
-		mTxnCurrencyCode = std::stoi(vec[0]);
-		auto floatDigits = std::stoi(vec[1]);
-		mTransactionAmount = Util::CalcAmount(vec[2], floatDigits);
+		mMsg.mTransactionAmount.currencyCode = std::stoi(vec[0]);
+		mMsg.mTransactionAmount.floatDigits = std::stoi(vec[1]);
+		mMsg.mTransactionAmount.amount = std::stoll(vec[2]);
     }
 
 	void SetField005(const std::vector<std::string>& vec) override
     {
-	    mSettleCurrencyCode = std::stoi(vec[0]);
-		auto floatDigits = std::stoi(vec[1]);
-	    mSettlementAmount = Util::CalcAmount(vec[2], floatDigits);
+	    // mMsg.mSettleCurrencyCode = std::stoi(vec[0]);
+		// auto floatDigits = std::stoi(vec[1]);
+	    // mMsg.mSettlementAmount = Util::CalcAmount(vec[2], floatDigits);
     }
 
 	void SetField006(const std::vector<std::string>& vec) override
     {
-	    mBillCurrencyCode = std::stoi(vec[0]);
-		auto floatDigits = std::stoi(vec[1]);
-	    mCardholderBillingAmount = Util::CalcAmount(vec[2], floatDigits);
+	    // mMsg.mBillCurrencyCode = std::stoi(vec[0]);
+		// auto floatDigits = std::stoi(vec[1]);
+	    // mMsg.mCardholderBillingAmount = Util::CalcAmount(vec[2], floatDigits);
     }
 
 	void SetField022(const std::string& str) override
     {
-        mPosDataCode = Util::HexStringToVectorValue<uint32_t>(str);
+        mMsg.mPosDataCode = Util::HexStringToVectorValue<uint32_t>(str);
     }
 
 private:
 };
 
-class Iso2003_07 : public Iso2003
+class Iso2003_01 : public Iso2003
 {
 public:
-    Iso2003_07(class IsoParser* isoParser) : Iso2003(isoParser)
+    Iso2003_01(class IsoParser* isoParser) : Iso2003(isoParser)
     {
-        SetIsoStandard(ISO2003_07);
+        SetIsoStandard(ISO2003_01);
     }
 
 private:
 };
 
-class Iso2003_08 : public Iso2003
+class Iso2003_02 : public Iso2003
 {
 public:
-    Iso2003_08(class IsoParser* isoParser) : Iso2003(isoParser)
+    Iso2003_02(class IsoParser* isoParser) : Iso2003(isoParser)
     {
-        SetIsoStandard(ISO2003_08);
+        SetIsoStandard(ISO2003_02);
     }
 
 private:
