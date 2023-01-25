@@ -20,12 +20,15 @@ class Bit002Component : public Component
     void GetBit() override
     {
         Component::GetBit();
-        mOwner->SetField002(mBitString);
+        mOwner->SetBit002(std::stoul(mBitString));
     }
 
     void PutBit() override
     {
-        mOutFieldString = ConvertToString(mOwner->GetField002());
+        Component::PutBit();
+
+        auto val = mOwner->GetBit002();
+        mOutFieldString = ConvertToString(val);
         mOwner->AppendFieldString(mOutFieldString);
     }
 };
@@ -44,12 +47,23 @@ class Bit003Component : public Component
     void GetBit() override
     {
         Component::GetBit();
-        mOwner->SetField003(mSubBitStrVec);
+
+        std::vector<uint8_t> val;
+        for (auto& item : mSubBitStrVec)
+            val.emplace_back(std::stoi(item));
+        
+        mOwner->SetBit003(val);
     }
 
     void PutBit() override
     {
-        mOutFieldString = ConvertToString(mOwner->GetField003());
+        Component::PutBit();
+
+        auto val = mOwner->GetBit003();
+        mOutFieldString =   Util::ConvertToPaddedString(val[0], 2) +
+                            Util::ConvertToPaddedString(val[1], 2) +
+                            Util::ConvertToPaddedString(val[2], 2);
+        
         mOwner->AppendFieldString(mOutFieldString);
     }
 };
@@ -68,12 +82,23 @@ class Bit004Component : public Component
     void GetBit() override
     {
         Component::GetBit();
-        mOwner->SetField004(mSubBitStrVec);
+
+        Amount val;
+        val.currencyCode = std::stoi(mSubBitStrVec[0]);
+		val.floatDigits = std::stoi(mSubBitStrVec[1]);
+		val.amount = std::stoll(mSubBitStrVec[2]);
+
+        mOwner->SetBit004(val);
     }
 
     void PutBit() override
     {
-        mOutFieldString = mOwner->GetField004();
+        Component::PutBit();
+
+        auto val = mOwner->GetBit004();
+        mOutFieldString =   Util::ConvertToPaddedString(val.currencyCode, mBitSpec.subSpec[0].size) +
+                            Util::ConvertToPaddedString(val.floatDigits, mBitSpec.subSpec[1].size) +
+                            Util::ConvertToPaddedString(val.amount, mBitSpec.subSpec[2].size);
         mOwner->AppendFieldString(mOutFieldString);
     }
 };
@@ -92,7 +117,13 @@ class Bit005Component : public Component
     void GetBit() override
     {
         Component::GetBit();
-        mOwner->SetField005(mSubBitStrVec);
+
+        Amount val;
+        val.currencyCode = std::stoi(mSubBitStrVec[0]);
+		val.floatDigits = std::stoi(mSubBitStrVec[1]);
+		val.amount = std::stoll(mSubBitStrVec[2]);
+
+        mOwner->SetBit005(val);
     }
 };
 
@@ -110,7 +141,13 @@ class Bit006Component : public Component
     void GetBit() override
     {
         Component::GetBit();
-        mOwner->SetField006(mSubBitStrVec);
+
+        Amount val;
+        val.currencyCode = std::stoi(mSubBitStrVec[0]);
+		val.floatDigits = std::stoi(mSubBitStrVec[1]);
+		val.amount = std::stoll(mSubBitStrVec[2]);
+
+        mOwner->SetBit006(val);
     }
 };
 
@@ -139,7 +176,7 @@ public:
         trxDateTime.mm = std::stoi(mBitString.substr(6, 8));
         trxDateTime.ss = std::stoi(mBitString.substr(8, 10));
 
-        mOwner->SetField007(trxDateTime);
+        mOwner->SetBit007(trxDateTime);
     }
 };
 
@@ -395,7 +432,7 @@ public:
     void GetBit() override
     {
         Component::GetBit();
-        mOwner->SetField022(mBitString);
+        mOwner->SetBit022(mBitString);
     }
 
     void PutBit() override
@@ -435,7 +472,7 @@ public:
     void GetBit() override
     {
         Component::GetBit();
-        mOwner->SetField024(mBitString);
+        mOwner->SetBit024(mBitString);
     }
 };
 

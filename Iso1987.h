@@ -13,9 +13,9 @@ class Iso1987 : public Iso
             {1, FIXED, "B", 8, 8},  /* bitmap */
             {2, LLVAR, "N", 0, 19}, /* PAN */
             {3, FIXED, "N", 6, 6, {{1, "N", 2}, {2, "N", 2}, {3, "N", 2}}},
-            {4, FIXED, "N", 12, 12},
-            {5, FIXED, "N", 12, 12},
-            {6, FIXED, "N", 12, 12},
+            {4, FIXED, "N", 12, 12, {{1, "N", 3}, {2, "N", 1}, {3, "N", 8}}},
+            {5, FIXED, "N", 12, 12, {{1, "N", 3}, {2, "N", 1}, {3, "N", 8}}},
+            {6, FIXED, "N", 12, 12, {{1, "N", 3}, {2, "N", 1}, {3, "N", 8}}},
             {7, FIXED, "N", 10, 10},
             {8, FIXED, "N", 8, 8},
             {9, FIXED, "N", 8, 8},
@@ -142,10 +142,10 @@ class Iso1987 : public Iso
     }
 
 public: // ISO message Getter/Setter methods (ISO-1987)
-    void SetField022(const std::string& str) override
+    void SetBit022(const std::string& str) override
     {
     }
-    void SetField024(const std::string& str) override { mMsg.mNetInternationalId = std::stoi(str); }
+    void SetBit024(const std::string& str) override { mMsg.mNetInternationalId = std::stoi(str); }
 };
 
 class Iso1987_01 : public Iso1987

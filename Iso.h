@@ -3,7 +3,7 @@
 
 #include "message.h"
 
-class Iso
+class Iso // Abstract class
 {
 public:
     Iso(class IsoParser* isoParser);
@@ -27,19 +27,6 @@ public:
 	void AddComponent(class Component* component);
 	void RemoveComponent(class Component* component);
 
-    virtual bool CheckFormat(const std::string& data, int bitNumber) // incomplete
-    {
-        return true;
-
-        // std::string format = mBitSpecVec.at(bitNumber).type;
-        // for (auto& c : format)
-        // {
-        //     size_t found = data.find(c);
-        //     if (found != std::string::npos)
-        //         ;
-        // }
-    }
-
     void Parse(); // not overridable
     void Build(); // not overridable
 
@@ -56,43 +43,26 @@ public:
 	virtual void ConvertField090() {}
 
 public: // ISO message Getter/Setter methods
-    void SetField002(const std::string& str) { mMsg.mPan = std::stoul(str); }
-    uint64_t GetField002() { return mMsg.mPan; }
+    void SetBit002(const uint64_t val) { mMsg.mPan = val; }
+    uint64_t GetBit002() { return mMsg.mPan; }
 
-    void SetField003(const std::vector<std::string>& vec)
-    {
-        mMsg.mPrCode = std::stoi(vec[0] + vec[1] + vec[2]);
-    }
-    int32_t GetField003() { return mMsg.mPrCode; }
+    void SetBit003(const std::vector<uint8_t>& vec) { mMsg.mPrCode = vec; }
+    std::vector<uint8_t> GetBit003() { return mMsg.mPrCode; }
 
-    virtual void SetField004(const std::vector<std::string>& vec)
-    {
-        mMsg.mTransactionAmount.amount = std::stoll(vec[0]);
-    }
-    std::string GetField004()
-    {
-        return  Util::ConvertToPaddedString(mMsg.mTransactionAmount.currencyCode, 3) +
-                Util::ConvertToPaddedString(mMsg.mTransactionAmount.floatDigits, 1) +
-                Util::ConvertToPaddedString(mMsg.mTransactionAmount.amount, 12);
-    }
+    virtual void SetBit004(const Amount& ref) { mMsg.mTransaction = ref; }
+    Amount GetBit004() { return mMsg.mTransaction; }
 
-    virtual void SetField005(const std::vector<std::string>& vec)
-    {
-        mMsg.mSettlementAmount.amount = std::stoll(vec[0]);
-    }
+    virtual void SetBit005(const Amount& ref) { mMsg.mSettlement = ref; }
 
-    virtual void SetField006(const std::vector<std::string>& vec)
-    {
-        mMsg.mCardholderBillingAmount.amount = std::stoll(vec[0]);
-    }
+    virtual void SetBit006(const Amount& ref) { mMsg.mCardholderBilling = ref; }
 
-    virtual void SetField007(const IsoDateTime& trxDateTime) { mMsg.mTrxDateTime = trxDateTime; }
+    virtual void SetBit007(const IsoDateTime& ref) { mMsg.mTrxDateTime = ref; }
 
-    void SetField010(const int32_t convRate) { mMsg.mCardholderConvRate = convRate; }
+    void SetBit010(const int32_t val) { mMsg.mCardholderConvRate = val; }
 
-    virtual void SetField022(const std::string& str) = 0; // different implementations (convert required)
+    virtual void SetBit022(const std::string& str) = 0; // different implementations (convert required)
 
-    virtual void SetField024(const std::string& str) { mMsg.mFunctionCode = std::stoi(str); }
+    virtual void SetBit024(const std::string& str) { mMsg.mFunctionCode = std::stoi(str); }
 
 private:
     class IsoParser* mOwner;

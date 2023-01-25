@@ -65,6 +65,7 @@ void Component::PutBit()
     /*
      * Implemented by child components
      */
+    mBitSpec = mOwner->GetBitSpecVec().at(mBitNumber);
 }
 
 int Component::CalcTotalSubfieldSize()

@@ -15,15 +15,15 @@ public:
                 "TransactionAmount: %lf\n\n",
                 mPan,
                 mPrCode,
-                mTransactionAmount);
+                mTransaction.amount);
     }
 
 public:
     uint64_t mPan;                      /* FD-002 */
-    int32_t mPrCode;                    /* FD-003 */
-    Amount mTransactionAmount;          /* FD-004 */
-    Amount mSettlementAmount;           /* FD-005 */
-    Amount mCardholderBillingAmount;    /* FD-006 */
+    std::vector<uint8_t> mPrCode;       /* FD-003 */
+    Amount mTransaction;                /* FD-004 */
+    Amount mSettlement;                 /* FD-005 */
+    Amount mCardholderBilling;          /* FD-006 */
     IsoDateTime mTrxDateTime;           /* FD-007 */
 
     int32_t mCardholderConvRate;        /* FD-010 */
